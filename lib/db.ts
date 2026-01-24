@@ -7,10 +7,10 @@ export type Todo = {
   id: ID;
   title: string;
   description?: string;
-  created_at: string; // ISO UTC
-  expires_at?: string | null;
-  completed_at?: string | null;
-  user_id: string;
+  createdAt: string; // ISO UTC
+  expiresAt?: string | null;
+  completedAt?: string | null;
+  userId: string;
 };
 
 export type User = {
@@ -21,7 +21,7 @@ export type User = {
 export type AuthCode = {
   email: string;
   code: string;
-  expires_at: number;
+  expiresAt: number;
 };
 
 const db: {
@@ -37,8 +37,8 @@ const db: {
 };
 
 export const createAuthCode = (email: string, code: string, ttlMs = 60_000) => {
-  const expires_at = Date.now() + ttlMs;
-  const rec = { email, code, expires_at };
+  const expiresAt = Date.now() + ttlMs;
+  const rec = { email, code, expiresAt };
   db.authCodes.push(rec);
   return rec;
 };
@@ -49,7 +49,7 @@ export const consumeAuthCode = (email: string, code: string) => {
   );
   if (idx === -1) return false;
   const rec = db.authCodes[idx];
-  if (Date.now() > rec.expires_at) return false;
+  if (Date.now() > rec.expiresAt) return false;
   db.authCodes.splice(idx, 1);
   return true;
 };
@@ -78,16 +78,16 @@ export const verifyRefreshTokenStored = (token: string) => {
   return rec.userId;
 };
 
-export const createTodo = (todo: Omit<Todo, "id" | "created_at">) => {
+export const createTodo = (todo: Omit<Todo, "id" | "createdAt">) => {
   const id = Math.random().toString(36).slice(2);
-  const created_at = new Date().toISOString();
-  const t: Todo = { id, created_at, ...todo };
+  const createdAt = new Date().toISOString();
+  const t: Todo = { id, createdAt, ...todo };
   db.todos.push(t);
   return t;
 };
 
 export const listTodosForUser = (userId: string) => {
-  return db.todos.filter((t) => t.user_id === userId);
+  return db.todos.filter((t) => t.userId === userId);
 };
 
 export const getTodo = (id: string) =>

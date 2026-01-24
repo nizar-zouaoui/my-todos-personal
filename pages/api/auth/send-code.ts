@@ -22,7 +22,7 @@ export default async function handler(
   const code = generateCode();
   await createAuthCode(email, code, 60_000);
 
-  // Send email via SendGrid if available
+  // Preferred: SendGrid
   if (SENDGRID_API_KEY) {
     try {
       await sgMail.send({
@@ -32,11 +32,13 @@ export default async function handler(
         text: `Your login code is ${code}. It expires in 1 minute.`,
         html: `<p>Your login code is <strong>${code}</strong>. It expires in 1 minute.</p>`,
       });
+      return res.json({ ok: true });
     } catch (e) {
       console.error("sendgrid error", e);
       return res.status(500).json({ error: "failed to send email" });
     }
   }
 
+  // If no provider configured, just return ok (code stored server-side)
   return res.json({ ok: true });
 }

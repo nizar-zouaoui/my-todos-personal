@@ -16,6 +16,7 @@
     "postcss": "8.4.23",
     "autoprefixer": "10.4.14",
     "@sendgrid/mail": "7.7.0",
+    "nodemailer": "6.9.4",
     "jsonwebtoken": "9.0.0",
     "react-markdown": "8.0.7",
     "remark-gfm": "3.0.1",

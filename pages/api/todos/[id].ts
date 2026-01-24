@@ -14,8 +14,8 @@ export default async function handler(
   const userId = (payload as any).userId;
 
   if (req.method === "GET") {
-    const t = await getTodo(id);
-    const owner = t?.user_id ?? t?.userId;
+    const t = await getTodo(id, userId);
+    const owner = t?.userId ?? t?.userId;
     if (!t || owner !== userId)
       return res.status(404).json({ error: "not found" });
     return res.json({ todo: t });
@@ -23,8 +23,8 @@ export default async function handler(
 
   if (req.method === "PUT") {
     const patch = req.body;
-    const t = await getTodo(id);
-    const owner = t?.user_id ?? t?.userId;
+    const t = await getTodo(id, userId);
+    const owner = t?.userId ?? t?.userId;
     if (!t || owner !== userId)
       return res.status(404).json({ error: "not found" });
     const updated = await updateTodo(id, patch, userId);
@@ -32,8 +32,8 @@ export default async function handler(
   }
 
   if (req.method === "DELETE") {
-    const t = await getTodo(id);
-    const owner = t?.user_id ?? t?.userId;
+    const t = await getTodo(id, userId);
+    const owner = t?.userId ?? t?.userId;
     if (!t || owner !== userId)
       return res.status(404).json({ error: "not found" });
     const ok = await deleteTodo(id, userId);

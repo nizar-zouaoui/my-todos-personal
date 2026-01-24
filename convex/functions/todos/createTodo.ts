@@ -7,16 +7,25 @@ export const createTodo = mutation({
     description: v.optional(v.string()),
     expiresAt: v.optional(v.string()),
     userId: v.string(),
+    createdAt: v.optional(v.string()),
+    completedAt: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const now = new Date().toISOString();
-    return await ctx.db.insert("todos", {
+    const todoElement = {
       title: args.title,
-      description: args.description ?? null,
       createdAt: now,
-      expiresAt: args.expiresAt ?? null,
-      completedAt: null,
       userId: args.userId,
-    });
+    };
+    if (args.description) {
+      (todoElement as any).description = args.description;
+    }
+    if (args.expiresAt) {
+      (todoElement as any).expiresAt = args.expiresAt;
+    }
+    if (args.completedAt) {
+      (todoElement as any).completedAt = args.completedAt;
+    }
+    return await ctx.db.insert("todos", todoElement);
   },
 });

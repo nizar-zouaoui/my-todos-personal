@@ -17,15 +17,18 @@ export default async function handler(
   }
 
   if (req.method === "POST") {
-    const { title, description, expires_at } = req.body;
+    const { title, description } = req.body;
     if (!title) return res.status(400).json({ error: "title required" });
-    const todo = await createTodo({
-      title,
-      description,
-      expires_at: expires_at || null,
-      completed_at: null,
-      user_id: userId,
-    });
+    console.log(userId);
+    const todoPayload = { title, description, userId };
+    if (req.body.completedAt) {
+      (todoPayload as any).completedAt = req.body.completedAt;
+    }
+    if (req.body.expiresAt) {
+      (todoPayload as any).expiresAt = req.body.expiresAt;
+    }
+    console.log(todoPayload);
+    const todo = await createTodo(todoPayload);
     return res.json({ todo });
   }
 

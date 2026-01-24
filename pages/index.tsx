@@ -8,9 +8,9 @@ type Todo = {
   id: string;
   title: string;
   description?: string;
-  created_at: string;
-  expires_at?: string | null;
-  completed_at?: string | null;
+  createdAt: string;
+  expiresAt?: string | null;
+  completedAt?: string | null;
 };
 
 export default function Home() {
@@ -38,7 +38,7 @@ export default function Home() {
       body: JSON.stringify({
         title,
         description,
-        expires_at: expiresAt || null,
+        expiresAt: expiresAt || null,
       }),
     });
     setTitle("");
@@ -49,9 +49,9 @@ export default function Home() {
 
   const notifications = todos.filter(
     (t) =>
-      !t.completed_at &&
-      t.expires_at &&
-      differenceInDays(parseISO(t.expires_at), new Date()) <= 2,
+      !t.completedAt &&
+      t.expiresAt &&
+      differenceInDays(parseISO(t.expiresAt), new Date()) <= 2,
   );
 
   return (
@@ -104,7 +104,7 @@ export default function Home() {
                 <div className="flex justify-between">
                   <strong>{n.title}</strong>
                   <span className="text-sm text-gray-600">
-                    Expires {formatDistanceToNow(parseISO(n.expires_at!))}
+                    Expires {formatDistanceToNow(parseISO(n.expiresAt!))}
                   </span>
                 </div>
                 <div className="mt-1 text-sm">
@@ -126,13 +126,13 @@ export default function Home() {
                   <div>
                     <strong>{t.title}</strong>
                     <div className="text-sm text-gray-600">
-                      Created {formatDistanceToNow(new Date(t.created_at))} ago
+                      Created {formatDistanceToNow(new Date(t.createdAt))} ago
                     </div>
                   </div>
                   <div>
-                    {t.expires_at && (
+                    {t.expiresAt && (
                       <div className="text-sm text-red-600">
-                        Expires {formatDistanceToNow(new Date(t.expires_at))}
+                        Expires {formatDistanceToNow(new Date(t.expiresAt))}
                       </div>
                     )}
                   </div>
