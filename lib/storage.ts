@@ -10,9 +10,8 @@ import { Id } from "../convex/_generated/dataModel";
 import * as local from "./db";
 
 const CONVEX_URL = process.env.NEXT_PUBLIC_CONVEX_URL;
-const CONVEX_KEY = process.env.CONVEX_DEPLOYMENT;
 
-const useConvex = Boolean(CONVEX_URL && CONVEX_KEY);
+const useConvex = Boolean(CONVEX_URL);
 
 // Initialize a single Convex HTTP client when configured.
 let convexClient: ConvexHttpClient | null = null;
