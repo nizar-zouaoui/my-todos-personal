@@ -20,9 +20,9 @@ export default async function handler(
 
   const user = await findOrCreateUser(email);
   const userId =
-    typeof user === "object" && user !== null && "id" in user
-      ? String((user as { id: unknown }).id)
-      : typeof user === "object" && user !== null && "_id" in user
+    typeof user === "string"
+      ? user
+      : user && typeof user === "object" && "_id" in user
         ? String((user as { _id: unknown })._id)
         : null;
   if (!userId)

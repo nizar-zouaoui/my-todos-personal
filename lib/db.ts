@@ -10,7 +10,7 @@ type TodoPatch = Partial<
 >;
 
 export type User = {
-  id: string;
+  _id: Id<"users">;
   email: string;
 };
 
@@ -32,8 +32,10 @@ const db: {
   refreshTokens: [],
 };
 
-const makeId = (): Id<"todos"> =>
+const makeTodoId = (): Id<"todos"> =>
   Math.random().toString(36).slice(2) as Id<"todos">;
+const makeUserId = (): Id<"users"> =>
+  Math.random().toString(36).slice(2) as Id<"users">;
 
 export const createAuthCode = (email: string, code: string, ttlMs = 60_000) => {
   const expiresAt = Date.now() + ttlMs;
@@ -56,7 +58,7 @@ export const consumeAuthCode = (email: string, code: string) => {
 export const findOrCreateUser = (email: string) => {
   let u = db.users.find((x) => x.email === email);
   if (!u) {
-    u = { id: Math.random().toString(36).slice(2), email };
+    u = { _id: makeUserId(), email };
     db.users.push(u);
   }
   return u;
@@ -80,7 +82,7 @@ export const verifyRefreshTokenStored = (token: string) => {
 export const createTodo = (
   todo: Omit<Todo, "_id" | "_creationTime" | "createdAt">,
 ) => {
-  const _id = makeId();
+  const _id = makeTodoId();
   const _creationTime = Date.now();
   const createdAt = new Date().toISOString();
   const t: Todo = { _id, _creationTime, createdAt, ...todo };

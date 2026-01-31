@@ -9,6 +9,7 @@ export const findOrCreateUser = mutation({
       .filter((u) => u.eq(u.field("email"), args.email))
       .first();
     if (existing) return existing;
-    return await ctx.db.insert("users", { email: args.email });
+    const id = await ctx.db.insert("users", { email: args.email });
+    return await ctx.db.get(id);
   },
 });
