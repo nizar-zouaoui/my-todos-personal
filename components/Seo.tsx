@@ -42,6 +42,10 @@ export default function Seo({
     <Head>
       <title>{resolvedTitle}</title>
       <meta name="description" content={resolvedDescription} />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+      />
       <link rel="canonical" href={resolvedCanonical} />
       <link rel="icon" href="/favicon.ico" />
       {noIndex && <meta name="robots" content="noindex, nofollow" />}

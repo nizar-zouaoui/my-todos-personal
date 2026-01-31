@@ -1,7 +1,44 @@
+const withPWA = require("@ducanh2912/next-pwa").default;
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["framer-motion"],
 };
 
-module.exports = nextConfig;
+module.exports = withPWA({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  runtimeCaching: [
+    {
+      urlPattern: /^https?.*\/api\/.*$/,
+      handler: "NetworkOnly",
+      options: {
+        cacheName: "api",
+      },
+    },
+    {
+      urlPattern: ({ request }) =>
+        request.destination === "script" ||
+        request.destination === "style" ||
+        request.destination === "image" ||
+        request.destination === "font",
+      handler: "StaleWhileRevalidate",
+      options: {
+        cacheName: "assets",
+        expiration: {
+          maxEntries: 60,
+          maxAgeSeconds: 30 * 24 * 60 * 60,
+        },
+      },
+    },
+    {
+      urlPattern: ({ request }) => request.mode === "navigate",
+      handler: "NetworkFirst",
+      options: {
+        cacheName: "pages",
+        networkTimeoutSeconds: 10,
+      },
+    },
+  ],
+})(nextConfig);
