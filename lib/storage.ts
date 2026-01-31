@@ -1,17 +1,19 @@
 // Storage proxy: delegates to in-memory `lib/db.ts` unless Convex deployment
 // environment variables are present. When configured, this module uses the
-// Convex server HTTP client (`ConvexHttpClient`) with the deployment key so
+// Convex server HTTP client (`ConvexHttpClient`) with the deployment URL so
 // Next.js API routes can call Convex securely. On any Convex error we fall
 // back to the in-memory adapter to preserve local development.
 
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../convex/_generated/api";
-import { Id } from "../convex/_generated/dataModel";
+import type { Doc, Id } from "../convex/_generated/dataModel";
 import * as local from "./db";
 
 const CONVEX_URL = process.env.NEXT_PUBLIC_CONVEX_URL;
 
 const useConvex = Boolean(CONVEX_URL);
+
+type ConvexTodo = Doc<"todos">;
 
 // Initialize a single Convex HTTP client when configured.
 let convexClient: ConvexHttpClient | null = null;
@@ -112,14 +114,15 @@ export const verifyRefreshTokenStored = async (token: string) => {
 };
 
 export const createTodo = async (
-  todo: Omit<local.Todo, "id" | "createdAt">,
+  todo: Omit<local.Todo, "_id" | "_creationTime" | "createdAt">,
 ) => {
   if (!useConvex) return local.createTodo(todo);
   try {
-    return await convexClient.mutation(
+    const created = await convexClient.mutation(
       api.functions.todos.createTodo.createTodo,
       todo,
     );
+    return created as ConvexTodo;
   } catch (e) {
     console.warn("Convex createTodo failed, falling back to local", e);
     return local.createTodo(todo);
@@ -129,10 +132,11 @@ export const createTodo = async (
 export const listTodosForUser = async (userId: string) => {
   if (!useConvex) return local.listTodosForUser(userId);
   try {
-    return await convexClient.query(
+    const list = await convexClient.query(
       api.functions.todos.listTodosForUser.listTodosForUser,
       { userId },
     );
+    return list as ConvexTodo[];
   } catch (e) {
     console.warn("Convex listTodosForUser failed, falling back to local", e);
     return local.listTodosForUser(userId);
@@ -140,26 +144,29 @@ export const listTodosForUser = async (userId: string) => {
 };
 
 export const getTodo = async (id: string, userId: string) => {
-  if (!useConvex) return local.getTodo(id);
+  if (!useConvex) return local.getTodo(id, userId);
   try {
-    return await convexClient.query(api.functions.todos.getTodo.getTask, {
+    const doc = await convexClient.query(api.functions.todos.getTodo.getTask, {
       todoId: id as Id<"todos">,
       userId,
     });
+    return doc as ConvexTodo | null;
   } catch (e) {
     console.warn("Convex getTodo failed, falling back to local", e);
-    return local.getTodo(id);
+    return local.getTodo(id, userId);
   }
 };
 
 export const updateTodo = async (
   id: string,
-  patch: Partial<local.Todo>,
+  patch: Partial<
+    Pick<local.Todo, "title" | "description" | "expiresAt" | "completedAt">
+  >,
   userId: string,
 ) => {
-  if (!useConvex) return local.updateTodo(id, patch);
+  if (!useConvex) return local.updateTodo(id, patch, userId);
   try {
-    return await convexClient.mutation(
+    const doc = await convexClient.mutation(
       api.functions.todos.updateTodo.updateTodo,
       {
         id: id as Id<"todos">,
@@ -167,22 +174,24 @@ export const updateTodo = async (
         userId,
       },
     );
+    return doc as ConvexTodo | null;
   } catch (e) {
     console.warn("Convex updateTodo failed, falling back to local", e);
-    return local.updateTodo(id, patch);
+    return local.updateTodo(id, patch, userId);
   }
 };
 
 export const deleteTodo = async (id: string, userId: string) => {
-  if (!useConvex) return local.deleteTodo(id);
+  if (!useConvex) return local.deleteTodo(id, userId);
   try {
-    return await convexClient.mutation(
-      api.functions.todos.deleteTodo.deleteTodo,
-      { id: id as Id<"todos">, userId },
-    );
+    await convexClient.mutation(api.functions.todos.deleteTodo.deleteTodo, {
+      id: id as Id<"todos">,
+      userId,
+    });
+    return true;
   } catch (e) {
     console.warn("Convex deleteTodo failed, falling back to local", e);
-    return local.deleteTodo(id);
+    return local.deleteTodo(id, userId);
   }
 };
 

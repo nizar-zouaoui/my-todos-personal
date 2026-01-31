@@ -19,14 +19,12 @@ export default async function handler(
   if (!ok) return res.status(400).json({ error: "invalid or expired code" });
 
   const user = await findOrCreateUser(email);
-  let userId: string | null = (user as any)?.id ?? (user as any)?._id ?? null;
-  if (userId && typeof userId !== "string") {
-    try {
-      userId = String(userId);
-    } catch {
-      userId = null;
-    }
-  }
+  const userId =
+    typeof user === "object" && user !== null && "id" in user
+      ? String((user as { id: unknown }).id)
+      : typeof user === "object" && user !== null && "_id" in user
+        ? String((user as { _id: unknown })._id)
+        : null;
   if (!userId)
     return res.status(500).json({ error: "failed to resolve user id" });
 

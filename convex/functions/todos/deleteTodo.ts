@@ -2,10 +2,9 @@ import { v } from "convex/values";
 import { mutation } from "../../_generated/server";
 
 export const deleteTodo = mutation({
-  args: { id: v.id("todos"), userId: v.optional(v.string()) },
+  args: { id: v.id("todos"), userId: v.string() },
   handler: async (ctx, args) => {
-    const userId = (ctx as any).auth?.userId ?? args.userId;
-    if (!userId) return null;
+    const userId = args.userId;
     const q = await ctx.db
       .query("todos")
       .filter((q) =>

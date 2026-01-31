@@ -16,8 +16,7 @@ npm install
 SENDGRID_API_KEY=your_sendgrid_key
 EMAIL_FROM=you@domain.com
 JWT_SECRET=replace_this_with_a_secure_secret
-CONVEX_URL=
-CONVEX_KEY=
+NEXT_PUBLIC_CONVEX_URL=
 ```
 
 1. Run dev server
@@ -28,7 +27,7 @@ npm run dev
 
 Notes
 
-- The current implementation uses an in-memory adapter at `lib/db.ts`. Replace it with a Convex adapter implementation and update API routes to call Convex when you have `CONVEX_URL` and `CONVEX_KEY`.
+- The current implementation uses an in-memory adapter at `lib/db.ts`. Provide `NEXT_PUBLIC_CONVEX_URL` to use Convex via the server-side HTTP client.
 - The login flow:
   - `POST /api/auth/send-code` to send a 6-digit code
   - `POST /api/auth/verify` to verify and receive JWT cookies

@@ -2,18 +2,25 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
 
-export const signAccessToken = (payload: object) => {
+export type JwtPayload = {
+  userId: string;
+};
+
+export const signAccessToken = (payload: JwtPayload) => {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 };
 
-export const signRefreshToken = (payload: object) => {
+export const signRefreshToken = (payload: JwtPayload) => {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 };
 
-export const verifyToken = (token: string) => {
+export const verifyToken = (token: string): JwtPayload | null => {
   try {
-    return jwt.verify(token, JWT_SECRET) as any;
-  } catch (e) {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (typeof decoded === "string" || !decoded) return null;
+    if (typeof (decoded as JwtPayload).userId !== "string") return null;
+    return decoded as JwtPayload;
+  } catch {
     return null;
   }
 };

@@ -1,0 +1,25 @@
+type PageHeaderProps = {
+  title: string;
+  subtitle?: string;
+  actions?: React.ReactNode;
+};
+
+export default function PageHeader({
+  title,
+  subtitle,
+  actions,
+}: PageHeaderProps) {
+  return (
+    <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        {subtitle && (
+          <p className="text-xs uppercase tracking-hero text-text-secondary">
+            {subtitle}
+          </p>
+        )}
+        <h1 className="text-h1 text-text-primary">{title}</h1>
+      </div>
+      {actions && <div className="flex items-center gap-3">{actions}</div>}
+    </header>
+  );
+}

@@ -1,17 +1,13 @@
 // Lightweight in-memory adapter for development. Replace with Convex adapter
 // when CONVEX_URL and CONVEX_KEY are available.
 
-type ID = string;
+import type { Doc, Id } from "../convex/_generated/dataModel";
 
-export type Todo = {
-  id: ID;
-  title: string;
-  description?: string;
-  createdAt: string; // ISO UTC
-  expiresAt?: string | null;
-  completedAt?: string | null;
-  userId: string;
-};
+export type Todo = Doc<"todos">;
+
+type TodoPatch = Partial<
+  Pick<Todo, "title" | "description" | "expiresAt" | "completedAt">
+>;
 
 export type User = {
   id: string;
@@ -35,6 +31,9 @@ const db: {
   authCodes: [],
   refreshTokens: [],
 };
+
+const makeId = (): Id<"todos"> =>
+  Math.random().toString(36).slice(2) as Id<"todos">;
 
 export const createAuthCode = (email: string, code: string, ttlMs = 60_000) => {
   const expiresAt = Date.now() + ttlMs;
@@ -78,30 +77,38 @@ export const verifyRefreshTokenStored = (token: string) => {
   return rec.userId;
 };
 
-export const createTodo = (todo: Omit<Todo, "id" | "createdAt">) => {
-  const id = Math.random().toString(36).slice(2);
+export const createTodo = (
+  todo: Omit<Todo, "_id" | "_creationTime" | "createdAt">,
+) => {
+  const _id = makeId();
+  const _creationTime = Date.now();
   const createdAt = new Date().toISOString();
-  const t: Todo = { id, createdAt, ...todo };
+  const t: Todo = { _id, _creationTime, createdAt, ...todo };
   db.todos.push(t);
   return t;
 };
 
-export const listTodosForUser = (userId: string) => {
-  return db.todos.filter((t) => t.userId === userId);
-};
+export const listTodosForUser = (userId: string) =>
+  db.todos.filter((t) => t.userId === userId);
 
-export const getTodo = (id: string) =>
-  db.todos.find((t) => t.id === id) || null;
+export const getTodo = (id: string, userId?: string) =>
+  db.todos.find(
+    (t) => t._id === (id as Id<"todos">) && (!userId || t.userId === userId),
+  ) || null;
 
-export const updateTodo = (id: string, patch: Partial<Todo>) => {
-  const t = db.todos.find((x) => x.id === id);
+export const updateTodo = (id: string, patch: TodoPatch, userId?: string) => {
+  const t = db.todos.find(
+    (x) => x._id === (id as Id<"todos">) && (!userId || x.userId === userId),
+  );
   if (!t) return null;
   Object.assign(t, patch);
   return t;
 };
 
-export const deleteTodo = (id: string) => {
-  const idx = db.todos.findIndex((x) => x.id === id);
+export const deleteTodo = (id: string, userId?: string) => {
+  const idx = db.todos.findIndex(
+    (x) => x._id === (id as Id<"todos">) && (!userId || x.userId === userId),
+  );
   if (idx === -1) return false;
   db.todos.splice(idx, 1);
   return true;

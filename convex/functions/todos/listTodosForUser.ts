@@ -2,10 +2,9 @@ import { v } from "convex/values";
 import { query } from "../../_generated/server";
 
 export const listTodosForUser = query({
-  args: { userId: v.optional(v.string()) },
+  args: { userId: v.string() },
   handler: async (ctx, args) => {
-    const userId = (ctx as any).auth?.userId ?? args.userId;
-    if (!userId) return [];
+    const userId = args.userId;
     return await ctx.db
       .query("todos")
       .filter((q) => q.eq(q.field("userId"), userId))

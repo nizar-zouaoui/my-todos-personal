@@ -2,10 +2,9 @@ import { v } from "convex/values";
 import { query } from "../../_generated/server";
 
 export const getTask = query({
-  args: { todoId: v.id("todos"), userId: v.optional(v.string()) },
+  args: { todoId: v.id("todos"), userId: v.string() },
   handler: async (ctx, args) => {
-    const userId = (ctx as any).auth?.userId ?? args.userId;
-    if (!userId) return null;
+    const userId = args.userId;
     const q = await ctx.db
       .query("todos")
       .filter((q) =>
