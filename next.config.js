@@ -2,6 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["framer-motion"],
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
