@@ -1,8 +1,8 @@
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import TodoForm, { TodoFormValues } from "../../components/todos/TodoForm";
 import Seo from "../../components/Seo";
+import TodoForm, { TodoFormValues } from "../../components/todos/TodoForm";
 import Button from "../../components/ui/Button";
 import PageHeader from "../../components/ui/PageHeader";
 import { verifyToken } from "../../lib/jwt";
@@ -45,7 +45,11 @@ export default function CreateTodo() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Seo title="Add a task" description="Add a new task to your day." noIndex />
+      <Seo
+        title="Add a task"
+        description="Add a new task to your day."
+        noIndex
+      />
       <div className="max-w-3xl mx-auto px-6 py-10 space-y-6">
         <PageHeader
           title="Add a task"

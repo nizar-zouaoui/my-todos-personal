@@ -29,7 +29,11 @@ export default function Verify() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-6 py-10">
-      <Seo title="Enter your code" description="Verify your sign-in code." noIndex />
+      <Seo
+        title="Enter your code"
+        description="Verify your sign-in code."
+        noIndex
+      />
       <MotionFadeIn className="w-full max-w-md">
         <Card className="p-6">
           <div className="mb-6">

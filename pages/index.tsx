@@ -1,4 +1,5 @@
 import type { GetServerSideProps } from "next";
+import JsonLd from "../components/JsonLd";
 import CTA from "../components/landing/CTA";
 import DashboardSummary from "../components/landing/DashboardSummary";
 import FeatureGrid from "../components/landing/FeatureGrid";
@@ -6,7 +7,6 @@ import Footer from "../components/landing/Footer";
 import Hero from "../components/landing/Hero";
 import Preview from "../components/landing/Preview";
 import Stats from "../components/landing/Stats";
-import JsonLd from "../components/JsonLd";
 import Seo from "../components/Seo";
 import type { Doc } from "../convex/_generated/dataModel";
 import { verifyToken } from "../lib/jwt";

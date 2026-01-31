@@ -24,7 +24,11 @@ export default function TaskView({ todo, notFound }: TaskViewProps) {
   if (notFound || !todo) {
     return (
       <div className="min-h-screen bg-background">
-        <Seo title="Task not found" description="We couldn't find that task." noIndex />
+        <Seo
+          title="Task not found"
+          description="We couldn't find that task."
+          noIndex
+        />
         <div className="max-w-3xl mx-auto px-6 py-10">
           <EmptyState
             title="We couldn't find that task"

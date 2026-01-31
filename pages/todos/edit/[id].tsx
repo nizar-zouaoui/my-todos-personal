@@ -1,11 +1,11 @@
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import Seo from "../../../components/Seo";
 import TodoForm, { TodoFormValues } from "../../../components/todos/TodoForm";
 import Button from "../../../components/ui/Button";
 import EmptyState from "../../../components/ui/EmptyState";
 import PageHeader from "../../../components/ui/PageHeader";
-import Seo from "../../../components/Seo";
 import type { Doc } from "../../../convex/_generated/dataModel";
 import { verifyToken } from "../../../lib/jwt";
 import { getTodo } from "../../../lib/storage";
@@ -52,7 +52,11 @@ export default function EditTodo({ todo, notFound }: EditPageProps) {
   if (notFound) {
     return (
       <div className="min-h-screen bg-background">
-        <Seo title="Task not found" description="We couldn't find that task." noIndex />
+        <Seo
+          title="Task not found"
+          description="We couldn't find that task."
+          noIndex
+        />
         <div className="max-w-3xl mx-auto px-6 py-10">
           <EmptyState
             title="We couldn't find that task"
