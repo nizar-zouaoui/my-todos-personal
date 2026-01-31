@@ -2,11 +2,11 @@ import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import Seo from "../components/Seo";
-import Button from "../components/ui/Button";
-import Card from "../components/ui/Card";
-import MotionFadeIn from "../components/ui/MotionFadeIn";
-import { verifyToken } from "../lib/jwt";
+import Seo from "../../components/Seo";
+import Button from "../../components/ui/Button";
+import Card from "../../components/ui/Card";
+import MotionFadeIn from "../../components/ui/MotionFadeIn";
+import { verifyToken } from "../../lib/jwt";
 
 export default function Login() {
   const [email, setEmail] = useState("");
