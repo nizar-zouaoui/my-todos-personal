@@ -2,6 +2,7 @@ import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import Seo from "../components/Seo";
 import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 import MotionFadeIn from "../components/ui/MotionFadeIn";
@@ -28,6 +29,7 @@ export default function Verify() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-6 py-10">
+      <Seo title="Enter your code" description="Verify your sign-in code." noIndex />
       <MotionFadeIn className="w-full max-w-md">
         <Card className="p-6">
           <div className="mb-6">

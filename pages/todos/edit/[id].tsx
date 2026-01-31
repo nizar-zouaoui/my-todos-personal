@@ -5,6 +5,7 @@ import TodoForm, { TodoFormValues } from "../../../components/todos/TodoForm";
 import Button from "../../../components/ui/Button";
 import EmptyState from "../../../components/ui/EmptyState";
 import PageHeader from "../../../components/ui/PageHeader";
+import Seo from "../../../components/Seo";
 import type { Doc } from "../../../convex/_generated/dataModel";
 import { verifyToken } from "../../../lib/jwt";
 import { getTodo } from "../../../lib/storage";
@@ -51,6 +52,7 @@ export default function EditTodo({ todo, notFound }: EditPageProps) {
   if (notFound) {
     return (
       <div className="min-h-screen bg-background">
+        <Seo title="Task not found" description="We couldn't find that task." noIndex />
         <div className="max-w-3xl mx-auto px-6 py-10">
           <EmptyState
             title="We couldn't find that task"
@@ -66,6 +68,7 @@ export default function EditTodo({ todo, notFound }: EditPageProps) {
   if (!todo) {
     return (
       <div className="min-h-screen bg-background">
+        <Seo title="Loading task" description="Loading your task." noIndex />
         <div className="max-w-3xl mx-auto px-6 py-10">
           <div className="rounded-2xl border border-border bg-surface-muted p-6 text-text-secondary">
             Loading your task...
@@ -77,6 +80,11 @@ export default function EditTodo({ todo, notFound }: EditPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={`Edit: ${todo.title}`}
+        description="Edit your task details."
+        noIndex
+      />
       <div className="max-w-3xl mx-auto px-6 py-10 space-y-6">
         <PageHeader
           title="Edit task"

@@ -19,9 +19,10 @@ export default function DashboardSummary({
 }: DashboardSummaryProps) {
   return (
     <section className="grid gap-6">
+      <h1 className="text-h1 text-text-primary">My day</h1>
       <div className="flex items-center justify-end gap-3">
         <Button href="/todos" variant="secondary">
-          My tasks
+          My day
         </Button>
         <Button href="/todos/create" variant="primary">
           Add task

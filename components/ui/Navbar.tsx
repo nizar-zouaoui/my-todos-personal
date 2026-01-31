@@ -18,7 +18,7 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
 
   return (
     <>
-      <div className="sticky top-0 z-20 border-b border-border bg-background/90 backdrop-blur">
+      <nav className="sticky top-0 z-20 border-b border-border bg-background/90 backdrop-blur">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-xl bg-primary text-background grid place-items-center font-semibold shadow-card">
@@ -61,7 +61,7 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
             Menu
           </button>
         </div>
-      </div>
+      </nav>
 
       {open && (
         <div className="md:hidden fixed inset-0 top-[72px] z-50">

@@ -29,13 +29,13 @@ export default function Hero() {
         >
           Your cozy daily planner
         </motion.p>
-        <motion.h2
+        <motion.h1
           variants={item}
           className="text-4xl md:text-5xl font-semibold leading-tight text-text-primary"
         >
           A gentle space for your lists, notes, and
           <span className="text-gradient"> little wins</span>.
-        </motion.h2>
+        </motion.h1>
         <motion.p
           variants={item}
           className="mt-4 text-lg text-text-secondary max-w-2xl"

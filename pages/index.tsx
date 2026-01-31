@@ -6,6 +6,8 @@ import Footer from "../components/landing/Footer";
 import Hero from "../components/landing/Hero";
 import Preview from "../components/landing/Preview";
 import Stats from "../components/landing/Stats";
+import JsonLd from "../components/JsonLd";
+import Seo from "../components/Seo";
 import type { Doc } from "../convex/_generated/dataModel";
 import { verifyToken } from "../lib/jwt";
 import { listTodosForUser } from "../lib/storage";
@@ -27,9 +29,31 @@ export default function Home({
   const completedCount = todos.filter((t) => t.completedAt).length;
   const pendingCount = totalCount - completedCount;
   const priorityCount = notifications.length;
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+    "http://localhost:3000";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Taskflow",
+    applicationCategory: "ProductivityApplication",
+    operatingSystem: "Web",
+    url: siteUrl,
+    description:
+      "A cozy daily planner for your tasks, notes, and gentle reminders.",
+  };
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={isAuthenticated ? "My day" : "Taskflow - Daily Planner"}
+        description={
+          isAuthenticated
+            ? "See what's coming up and keep your day on track."
+            : "A cozy daily planner for your tasks, notes, and gentle reminders."
+        }
+      />
+      {!isAuthenticated && <JsonLd data={jsonLd} />}
       <div className="max-w-6xl mx-auto px-6 py-10 space-y-16">
         {isAuthenticated ? (
           <DashboardSummary

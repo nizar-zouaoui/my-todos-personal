@@ -1,6 +1,7 @@
 import type { GetServerSideProps } from "next";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Seo from "../../../components/Seo";
 import Button from "../../../components/ui/Button";
 import Card from "../../../components/ui/Card";
 import EmptyState from "../../../components/ui/EmptyState";
@@ -23,6 +24,7 @@ export default function TaskView({ todo, notFound }: TaskViewProps) {
   if (notFound || !todo) {
     return (
       <div className="min-h-screen bg-background">
+        <Seo title="Task not found" description="We couldn't find that task." noIndex />
         <div className="max-w-3xl mx-auto px-6 py-10">
           <EmptyState
             title="We couldn't find that task"
@@ -37,6 +39,11 @@ export default function TaskView({ todo, notFound }: TaskViewProps) {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={todo.title}
+        description={todo.description || "A task in your daily planner."}
+        noIndex
+      />
       <div className="max-w-3xl mx-auto px-6 py-10">
         <MotionFadeIn className="space-y-6">
           <PageHeader

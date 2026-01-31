@@ -5,10 +5,12 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Seo from "../../components/Seo";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import EmptyState from "../../components/ui/EmptyState";
 import MotionFadeIn from "../../components/ui/MotionFadeIn";
+import PageHeader from "../../components/ui/PageHeader";
 import StatusPill from "../../components/ui/StatusPill";
 import type { Doc } from "../../convex/_generated/dataModel";
 import { verifyToken } from "../../lib/jwt";
@@ -91,7 +93,13 @@ export default function TodosPage({
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="My day"
+        description="Keep your tasks organized and your day feeling calm."
+        noIndex
+      />
       <div className="max-w-5xl mx-auto px-6 py-10">
+        <PageHeader title="My day" subtitle="Daily planner" />
         <div className="flex items-center justify-end pb-6">
           <Button href="/todos/create" variant="primary">
             Add task
