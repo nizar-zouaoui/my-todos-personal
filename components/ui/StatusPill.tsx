@@ -17,7 +17,7 @@ export default function StatusPill({
 }: StatusPillProps) {
   return (
     <span
-      className={`inline-flex items-center rounded-sm px-2 py-1 text-xs font-medium ${
+      className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
         variants[variant]
       } ${className || ""}`}
     >

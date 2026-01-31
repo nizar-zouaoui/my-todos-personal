@@ -2,6 +2,7 @@ import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import TodoForm, { TodoFormValues } from "../../../components/todos/TodoForm";
+import Button from "../../../components/ui/Button";
 import EmptyState from "../../../components/ui/EmptyState";
 import PageHeader from "../../../components/ui/PageHeader";
 import type { Doc } from "../../../convex/_generated/dataModel";
@@ -52,9 +53,9 @@ export default function EditTodo({ todo, notFound }: EditPageProps) {
       <div className="min-h-screen bg-background">
         <div className="max-w-3xl mx-auto px-6 py-10">
           <EmptyState
-            title="Task not found"
-            body="We couldn't find that task. Return to your dashboard and pick another."
-            actionLabel="Back to todos"
+            title="We couldn't find that task"
+            body="Let's head back and pick another one."
+            actionLabel="Back to tasks"
             actionHref="/todos"
           />
         </div>
@@ -66,8 +67,8 @@ export default function EditTodo({ todo, notFound }: EditPageProps) {
     return (
       <div className="min-h-screen bg-background">
         <div className="max-w-3xl mx-auto px-6 py-10">
-          <div className="rounded-lg border border-border bg-surface-muted p-6 text-text-secondary">
-            Loading task...
+          <div className="rounded-2xl border border-border bg-surface-muted p-6 text-text-secondary">
+            Loading your task...
           </div>
         </div>
       </div>
@@ -77,7 +78,23 @@ export default function EditTodo({ todo, notFound }: EditPageProps) {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-3xl mx-auto px-6 py-10 space-y-6">
-        <PageHeader title="Edit task" subtitle="Task" />
+        <PageHeader
+          title="Edit task"
+          subtitle="Details"
+          actions={
+            <>
+              <Button href="/todos" variant="secondary">
+                Back to tasks
+              </Button>
+              <Button
+                href={`/todos/task/${String(todo._id)}`}
+                variant="primary"
+              >
+                Back to task
+              </Button>
+            </>
+          }
+        />
         <TodoForm
           mode="edit"
           initialValues={todo}

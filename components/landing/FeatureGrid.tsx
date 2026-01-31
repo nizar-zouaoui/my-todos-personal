@@ -2,20 +2,20 @@ import Card from "../ui/Card";
 
 const features = [
   {
-    title: "Priority alerts",
-    body: "Stay ahead of deadlines with automatic priority views.",
+    title: "Gentle reminders",
+    body: "See what's coming up without the stress.",
   },
   {
-    title: "Markdown notes",
-    body: "Write clean specs, checklists, and context in one place.",
+    title: "Cozy notes",
+    body: "Add little details, lists, or thoughts right where you need them.",
   },
   {
-    title: "Email sign-in",
-    body: "Secure 6-digit login codes keep access lightweight.",
+    title: "Easy sign-in",
+    body: "A quick email code and you're ready to plan.",
   },
   {
-    title: "Focus views",
-    body: "Filter work by pending, completed, or urgent tasks.",
+    title: "Simple views",
+    body: "Switch between what’s next, what’s done, and what’s due soon.",
   },
 ];
 

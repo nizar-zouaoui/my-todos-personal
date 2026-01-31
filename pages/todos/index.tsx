@@ -92,15 +92,20 @@ export default function TodosPage({
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto px-6 py-10">
+        <div className="flex items-center justify-end pb-6">
+          <Button href="/todos/create" variant="primary">
+            Add task
+          </Button>
+        </div>
         <MotionFadeIn className="space-y-6">
           <Card className="p-4">
             <div className="flex flex-wrap items-center gap-2 mb-4">
               {(
                 [
-                  { id: "all", label: "All" },
-                  { id: "pending", label: "Pending" },
-                  { id: "priority", label: "Priority" },
-                  { id: "completed", label: "Completed" },
+                  { id: "all", label: "All tasks" },
+                  { id: "pending", label: "In progress" },
+                  { id: "priority", label: "Do soon" },
+                  { id: "completed", label: "Done" },
                 ] as const
               ).map((tab) => (
                 <button
@@ -133,21 +138,21 @@ export default function TodosPage({
                         {t.title}
                       </Link>
                       <div className="text-sm text-text-secondary">
-                        Created {formatDistanceToNow(new Date(t.createdAt))} ago
+                        Added {formatDistanceToNow(new Date(t.createdAt))} ago
                       </div>
                       <div className="mt-2 flex flex-wrap gap-2">
                         {t.completedAt && (
-                          <StatusPill label="Completed" variant="success" />
+                          <StatusPill label="Done" variant="success" />
                         )}
                         {!t.completedAt && priorityIds.has(String(t._id)) && (
-                          <StatusPill label="Priority" variant="warning" />
+                          <StatusPill label="Do soon" variant="warning" />
                         )}
                       </div>
                     </div>
                     <div>
                       {t.expiresAt && (
                         <div className="text-sm text-warning">
-                          Expires {formatDistanceToNow(new Date(t.expiresAt))}
+                          Do by {formatDistanceToNow(new Date(t.expiresAt))}
                         </div>
                       )}
                     </div>
@@ -156,13 +161,13 @@ export default function TodosPage({
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
                       components={{
-                        ul: ({ node, ...props }) => (
+                        ul: ({ node, ordered, ...props }) => (
                           <ul className="list-disc list-inside" {...props} />
                         ),
-                        ol: ({ node, ...props }) => (
+                        ol: ({ node, ordered, ...props }) => (
                           <ol className="list-decimal list-inside" {...props} />
                         ),
-                        li: ({ node, ...props }) => (
+                        li: ({ node, ordered, ...props }) => (
                           <li className="my-1" {...props} />
                         ),
                       }}
@@ -176,7 +181,7 @@ export default function TodosPage({
                         variant="secondary"
                         onClick={() => toggleComplete(t)}
                       >
-                        Mark complete
+                        Mark done
                       </Button>
                     )}
                     <Button
@@ -184,7 +189,7 @@ export default function TodosPage({
                       className="text-warning"
                       onClick={() => remove(t)}
                     >
-                      Delete
+                      Remove
                     </Button>
                   </div>
                 </Card>
@@ -192,9 +197,9 @@ export default function TodosPage({
               {filteredTodos.length === 0 && (
                 <li>
                   <EmptyState
-                    title="No tasks yet"
-                    body="Create a task to start tracking your work in Taskflow."
-                    actionLabel="Create task"
+                    title="All caught up!"
+                    body="Ready to add your first task?"
+                    actionLabel="Add a task"
                     actionHref="/todos/create"
                   />
                 </li>

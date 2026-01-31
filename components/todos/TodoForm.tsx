@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Bold, Code, Italic, List, ListTodo } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactMarkdown from "react-markdown";
-import { Bold, Code, Italic, List, ListTodo } from "lucide-react";
 import { z } from "zod";
 import type { Doc } from "../../convex/_generated/dataModel";
 import Button from "../ui/Button";
@@ -10,7 +10,7 @@ import Card from "../ui/Card";
 import MotionFadeIn from "../ui/MotionFadeIn";
 
 const todoSchema = z.object({
-  title: z.string().min(1, "Title is required"),
+  title: z.string().min(1, "Give your task a title"),
   description: z.string().optional(),
   expiresAt: z.string().optional(),
 });
@@ -112,7 +112,7 @@ export default function TodoForm({
           <div>
             <input
               className={inputClass}
-              placeholder="Title"
+              placeholder="Task title"
               {...register("title")}
             />
             {errors.title && (
@@ -195,7 +195,7 @@ export default function TodoForm({
 
               <textarea
                 className={editorInputClass}
-                placeholder="Description (Markdown)"
+                placeholder="Notes (Markdown)"
                 rows={6}
                 style={{ display: activeTab === "write" ? "block" : "none" }}
                 {...descriptionRegister}
@@ -210,7 +210,7 @@ export default function TodoForm({
                   {descriptionValue.trim().length > 0 ? (
                     <ReactMarkdown>{descriptionValue}</ReactMarkdown>
                   ) : (
-                    <p className="text-text-secondary">Nothing to preview yet.</p>
+                    <p className="text-text-secondary">Nothing here yet.</p>
                   )}
                 </div>
               )}
@@ -222,6 +222,7 @@ export default function TodoForm({
             )}
           </div>
           <div>
+            <p className="text-xs text-text-secondary mb-2">Do by</p>
             <input
               className={inputClass}
               type="datetime-local"
@@ -230,10 +231,10 @@ export default function TodoForm({
           </div>
           <div className="flex flex-wrap gap-3">
             <Button type="submit" variant="primary" loading={isSubmitting}>
-              {mode === "create" ? "Create" : "Save"}
+              {mode === "create" ? "Add task" : "Save changes"}
             </Button>
             <Button href="/todos" variant="secondary">
-              Cancel
+              Back to list
             </Button>
           </div>
         </form>

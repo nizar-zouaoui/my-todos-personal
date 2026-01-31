@@ -21,44 +21,41 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
       <div className="sticky top-0 z-20 border-b border-border bg-background/90 backdrop-blur">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-lg bg-primary text-background grid place-items-center font-semibold shadow-card">
+            <div className="h-9 w-9 rounded-xl bg-primary text-background grid place-items-center font-semibold shadow-card">
               T
             </div>
             <div>
-              <p className="text-xs uppercase tracking-hero text-text-secondary">
-                Taskflow
+              <p className="text-xs tracking-hero text-text-secondary">
+                My Todos Personal
               </p>
               <span className="text-sm text-text-primary">
-                Calm productivity
+                Plan your day, your way.
               </span>
             </div>
           </Link>
 
           <div className="hidden md:flex items-center gap-3">
-            <Button href="/" variant="secondary">
+            <Button href="/" variant="subtle">
               Home
             </Button>
             {isAuthenticated ? (
               <>
-                <Button href="/todos" variant="secondary">
-                  Todos
-                </Button>
-                <Button href="/todos/create" variant="secondary">
-                  Create
+                <Button href="/todos" variant="subtle">
+                  My tasks
                 </Button>
                 <Button variant="subtle" onClick={logout}>
-                  Logout
+                  Sign out
                 </Button>
               </>
             ) : (
               <Button href="/login" variant="primary">
-                Login
+                Sign in
               </Button>
             )}
           </div>
 
           <button
-            className="md:hidden rounded-md border border-border px-3 py-2 text-sm text-text-secondary transition-soft"
+            className="md:hidden rounded-xl border border-border px-3 py-2 text-sm text-text-secondary transition-soft"
             onClick={() => setOpen((prev) => !prev)}
           >
             Menu
@@ -90,14 +87,7 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
                     className="text-text-primary"
                     onClick={() => setOpen(false)}
                   >
-                    Todos
-                  </Link>
-                  <Link
-                    href="/todos/create"
-                    className="text-text-primary"
-                    onClick={() => setOpen(false)}
-                  >
-                    Create
+                    My tasks
                   </Link>
                   <button
                     className="text-text-secondary text-left"
@@ -106,7 +96,7 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
                       void logout();
                     }}
                   >
-                    Logout
+                    Sign out
                   </button>
                 </>
               ) : (
@@ -115,7 +105,7 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
                   className="text-text-primary"
                   onClick={() => setOpen(false)}
                 >
-                  Login
+                  Sign in
                 </Link>
               )}
             </div>

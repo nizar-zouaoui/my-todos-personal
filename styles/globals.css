@@ -3,22 +3,22 @@
 @tailwind utilities;
 
 :root {
-  --background: 24 33% 98%;
-  --surface: 0 0% 100%;
-  --surface-muted: 24 25% 96%;
-  --primary: 222 47% 43%;
-  --primary-hover: 222 47% 38%;
-  --accent: 258 45% 55%;
-  --text-primary: 222 15% 20%;
-  --text-secondary: 222 10% 45%;
-  --border: 222 12% 85%;
+  --background: 30 45% 97%;
+  --surface: 30 35% 99%;
+  --surface-muted: 30 28% 94%;
+  --primary: 12 82% 56%;
+  --primary-hover: 12 82% 50%;
+  --accent: 32 70% 62%;
+  --text-primary: 24 20% 18%;
+  --text-secondary: 24 12% 45%;
+  --border: 24 18% 84%;
   --success: 150 45% 35%;
   --warning: 32 90% 48%;
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 22px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
 }
 
 html,

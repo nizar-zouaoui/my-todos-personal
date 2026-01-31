@@ -6,19 +6,19 @@ export default function CTA() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div>
           <h3 className="text-2xl font-semibold text-text-primary">
-            Start each week with a calm plan
+            Start the week with a cozy plan
           </h3>
           <p className="mt-2 text-text-secondary max-w-2xl">
-            Taskflow turns scattered notes into a focused agenda. Join teams
-            building consistent, sustainable productivity.
+            My Todos Personal turns scattered thoughts into a warm, simple day
+            plan. Keep life organized without making it feel like work.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Button href="/login" variant="primary">
-            Get started
+            Start planning
           </Button>
           <Button href="/todos" variant="secondary">
-            View tasks
+            See my tasks
           </Button>
         </div>
       </div>

@@ -14,7 +14,7 @@ export default function EmptyState({
   actionHref,
 }: EmptyStateProps) {
   return (
-    <div className="rounded-lg border border-border bg-surface-muted p-6 text-center shadow-card">
+    <div className="rounded-2xl border border-border bg-surface-muted p-6 text-center shadow-card">
       <h3 className="text-h2 text-text-primary">{title}</h3>
       <p className="mt-2 text-text-secondary max-w-xl mx-auto">{body}</p>
       {actionLabel && actionHref && (

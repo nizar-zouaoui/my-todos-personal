@@ -30,12 +30,12 @@ export default function Login() {
       <MotionFadeIn className="w-full max-w-md">
         <Card className="p-6">
           <div className="mb-6">
-            <p className="text-xs uppercase tracking-hero text-text-secondary">
-              Taskflow access
+            <p className="text-xs tracking-hero text-text-secondary">
+              Welcome to My Todos Personal
             </p>
-            <h1 className="text-h1 text-text-primary">Sign in</h1>
+            <h1 className="text-h1 text-text-primary">Sign in to your day</h1>
             <p className="text-text-secondary mt-2">
-              We will email you a 6-digit verification code.
+              We'll email you a 6-digit code to get you started.
             </p>
           </div>
           <div className="space-y-4">
@@ -47,18 +47,18 @@ export default function Login() {
               type="email"
             />
             <Button className="w-full" onClick={send}>
-              Send code
+              Send my code
             </Button>
             {sent && (
               <p className="text-sm text-success">
-                Code sent — check your email.
+                All set — check your inbox.
               </p>
             )}
           </div>
           <div className="mt-6 text-sm text-text-secondary">
-            New to Taskflow?{" "}
+            New here?{" "}
             <Link href="/" className="text-text-primary">
-              Learn more
+              Take a quick tour
             </Link>
           </div>
         </Card>

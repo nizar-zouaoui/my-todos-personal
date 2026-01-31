@@ -31,11 +31,11 @@ export default function Verify() {
       <MotionFadeIn className="w-full max-w-md">
         <Card className="p-6">
           <div className="mb-6">
-            <p className="text-xs uppercase tracking-hero text-text-secondary">
-              Verify access
+            <p className="text-xs tracking-hero text-text-secondary">
+              Almost there
             </p>
-            <h1 className="text-h1 text-text-primary">Enter code</h1>
-            <p className="text-text-secondary mt-2">Sent to {email}</p>
+            <h1 className="text-h1 text-text-primary">Enter your code</h1>
+            <p className="text-text-secondary mt-2">We sent it to {email}</p>
           </div>
           <div className="space-y-4">
             <input
@@ -45,13 +45,13 @@ export default function Verify() {
               placeholder="123456"
             />
             <Button className="w-full" onClick={verify}>
-              Verify
+              Continue
             </Button>
           </div>
           <div className="mt-6 text-sm text-text-secondary">
-            Need a new code?{" "}
+            Need a new one?{" "}
             <Link href="/login" className="text-text-primary">
-              Resend
+              Send again
             </Link>
           </div>
         </Card>

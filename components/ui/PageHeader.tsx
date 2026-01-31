@@ -13,7 +13,7 @@ export default function PageHeader({
     <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
         {subtitle && (
-          <p className="text-xs uppercase tracking-hero text-text-secondary">
+          <p className="text-xs tracking-hero text-text-secondary">
             {subtitle}
           </p>
         )}

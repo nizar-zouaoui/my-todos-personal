@@ -10,15 +10,15 @@ export default function Header({ isAuthenticated, onLogout }: HeaderProps) {
   return (
     <header className="flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-lg bg-primary text-background grid place-items-center font-semibold shadow-card">
+        <div className="h-10 w-10 rounded-xl bg-primary text-background grid place-items-center font-semibold shadow-card">
           T
         </div>
         <div>
-          <p className="text-xs uppercase tracking-hero text-text-secondary">
-            Taskflow
+          <p className="text-xs tracking-hero text-text-secondary">
+            My Todos Personal
           </p>
           <h1 className="text-lg font-semibold text-text-primary">
-            Calm productivity for modern teams
+            A cozy planner for your everyday lists
           </h1>
         </div>
       </div>
@@ -29,10 +29,10 @@ export default function Header({ isAuthenticated, onLogout }: HeaderProps) {
               My tasks
             </Button>
             <Button href="/todos/create" variant="primary">
-              Create
+              Add task
             </Button>
             <Button variant="subtle" onClick={onLogout}>
-              Logout
+              Sign out
             </Button>
           </>
         ) : (
@@ -44,7 +44,7 @@ export default function Header({ isAuthenticated, onLogout }: HeaderProps) {
               href="/login"
               className="text-sm text-text-secondary hover:text-text-primary transition-soft"
             >
-              Book a demo
+              Take a quick tour
             </Link>
           </>
         )}

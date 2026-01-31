@@ -16,7 +16,7 @@ export default function Card({
   variant = "default",
 }: CardProps) {
   return (
-    <div className={`rounded-lg ${variants[variant]} ${className || ""}`}>
+    <div className={`rounded-2xl ${variants[variant]} ${className || ""}`}>
       {children}
     </div>
   );

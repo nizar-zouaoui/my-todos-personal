@@ -32,17 +32,17 @@ module.exports = {
         xl: "var(--radius-xl)",
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: ['"Nunito"', '"Quicksand"', "Inter", "system-ui", "sans-serif"],
       },
       fontSize: {
         display: ["2.75rem", { lineHeight: "1.1", fontWeight: "600" }],
         h1: ["2rem", { lineHeight: "1.2", fontWeight: "600" }],
         h2: ["1.5rem", { lineHeight: "1.3", fontWeight: "600" }],
-        body: ["1rem", { lineHeight: "1.6" }],
+        body: ["1rem", { lineHeight: "1.7" }],
         caption: ["0.875rem", { lineHeight: "1.5" }],
       },
       letterSpacing: {
-        hero: "0.2em",
+        hero: "0.08em",
       },
       transitionDuration: {
         soft: "180ms",

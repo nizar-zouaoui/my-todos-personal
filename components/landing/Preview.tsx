@@ -2,19 +2,19 @@ import Card from "../ui/Card";
 
 const previewItems = [
   {
-    title: "Product review",
-    meta: "Due tomorrow",
-    status: "Priority",
+    title: "Pick up groceries",
+    meta: "Do by tomorrow",
+    status: "Do soon",
   },
   {
-    title: "Customer onboarding",
-    meta: "Due in 3 days",
-    status: "Pending",
+    title: "Plan weekend brunch",
+    meta: "Do by this weekend",
+    status: "In progress",
   },
   {
-    title: "Release follow-up",
-    meta: "Completed today",
-    status: "Completed",
+    title: "Text Alex back",
+    meta: "Done today",
+    status: "Done",
   },
 ];
 
@@ -23,20 +23,20 @@ export default function Preview() {
     <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] items-center">
       <div>
         <h3 className="text-2xl font-semibold text-text-primary">
-          A dashboard that keeps you in flow
+          Your day at a glance
         </h3>
         <p className="mt-3 text-text-secondary max-w-2xl">
-          See urgent work at a glance, track progress across your team, and keep
-          context close with markdown notes.
+          See what’s next, what’s done, and what needs a little nudge. Keep
+          notes close and your day feeling calm.
         </p>
       </div>
       <Card className="p-5 bg-surface">
-        <div className="text-sm text-text-secondary">Preview</div>
+        <div className="text-sm text-text-secondary">Sample day</div>
         <div className="mt-3 space-y-3">
           {previewItems.map((item) => (
             <div
               key={item.title}
-              className="flex items-center justify-between rounded-md border border-border bg-surface-muted px-3 py-2"
+              className="flex items-center justify-between rounded-xl border border-border bg-surface-muted px-3 py-2"
             >
               <div>
                 <div className="text-sm font-medium text-text-primary">

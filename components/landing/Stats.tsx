@@ -1,7 +1,7 @@
 const stats = [
-  { label: "Tasks completed", value: "12k+" },
-  { label: "Teams onboarded", value: "350+" },
-  { label: "Weekly logins", value: "95%" },
+  { label: "Lists made", value: "12k+" },
+  { label: "Little wins", value: "4k+" },
+  { label: "Happy weeks", value: "95%" },
 ];
 
 export default function Stats() {
