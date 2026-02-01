@@ -10,7 +10,9 @@ import { verifyToken } from "../../lib/jwt";
 
 export default function Verify() {
   const router = useRouter();
-  const email = (router.query.email as string) || "";
+  const email = router.query.email as string;
+  if (!email) router.push("/login");
+
   const [code, setCode] = useState("");
 
   const inputClass =

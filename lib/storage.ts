@@ -66,6 +66,32 @@ export const consumeAuthCode = async (email: string, code: string) => {
   }
 };
 
+export const getLatestAuthCodeExpiresAt = async (email: string) => {
+  if (!useConvex) return local.getLatestAuthCodeExpiresAt(email);
+  try {
+    const result = await convexClient.query(
+      api.functions.auth.getLatestAuthCode.getLatestAuthCode,
+      { email },
+    );
+    return result?.expiresAt ?? null;
+  } catch (e) {
+    console.warn("Convex getLatestAuthCode failed, falling back to local", e);
+    return local.getLatestAuthCodeExpiresAt(email);
+  }
+};
+
+export const getUserByEmail = async (email: string) => {
+  if (!useConvex) return local.getUserByEmail(email);
+  try {
+    return await convexClient.query(api.functions.users.getByEmail.getByEmail, {
+      email,
+    });
+  } catch (e) {
+    console.warn("Convex getUserByEmail failed, falling back to local", e);
+    return local.getUserByEmail(email);
+  }
+};
+
 export const findOrCreateUser = async (email: string) => {
   if (!useConvex) return local.findOrCreateUser(email);
   try {

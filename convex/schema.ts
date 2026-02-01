@@ -13,7 +13,7 @@ export default defineSchema({
     email: v.string(),
     code: v.string(),
     expiresAt: v.number(),
-  }),
+  }).index("by_expiresAt", ["expiresAt"]),
 
   refreshTokens: defineTable({
     token: v.string(),

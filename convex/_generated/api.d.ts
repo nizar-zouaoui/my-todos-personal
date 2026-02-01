@@ -11,7 +11,9 @@
 import type * as crons from "../crons.js";
 import type * as functions_auth_consumeAuthCode from "../functions/auth/consumeAuthCode.js";
 import type * as functions_auth_createAuthCode from "../functions/auth/createAuthCode.js";
+import type * as functions_auth_deleteExpiredCodes from "../functions/auth/deleteExpiredCodes.js";
 import type * as functions_auth_findOrCreateUser from "../functions/auth/findOrCreateUser.js";
+import type * as functions_auth_getLatestAuthCode from "../functions/auth/getLatestAuthCode.js";
 import type * as functions_auth_storeRefreshToken from "../functions/auth/storeRefreshToken.js";
 import type * as functions_auth_verifyRefreshToken from "../functions/auth/verifyRefreshToken.js";
 import type * as functions_push_deleteSubscription from "../functions/push/deleteSubscription.js";
@@ -29,6 +31,7 @@ import type * as functions_todos_getTodo from "../functions/todos/getTodo.js";
 import type * as functions_todos_listTodosForUser from "../functions/todos/listTodosForUser.js";
 import type * as functions_todos_toggleMute from "../functions/todos/toggleMute.js";
 import type * as functions_todos_updateTodo from "../functions/todos/updateTodo.js";
+import type * as functions_users_getByEmail from "../functions/users/getByEmail.js";
 
 import type {
   ApiFromModules,
@@ -40,7 +43,9 @@ declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   "functions/auth/consumeAuthCode": typeof functions_auth_consumeAuthCode;
   "functions/auth/createAuthCode": typeof functions_auth_createAuthCode;
+  "functions/auth/deleteExpiredCodes": typeof functions_auth_deleteExpiredCodes;
   "functions/auth/findOrCreateUser": typeof functions_auth_findOrCreateUser;
+  "functions/auth/getLatestAuthCode": typeof functions_auth_getLatestAuthCode;
   "functions/auth/storeRefreshToken": typeof functions_auth_storeRefreshToken;
   "functions/auth/verifyRefreshToken": typeof functions_auth_verifyRefreshToken;
   "functions/push/deleteSubscription": typeof functions_push_deleteSubscription;
@@ -58,6 +63,7 @@ declare const fullApi: ApiFromModules<{
   "functions/todos/listTodosForUser": typeof functions_todos_listTodosForUser;
   "functions/todos/toggleMute": typeof functions_todos_toggleMute;
   "functions/todos/updateTodo": typeof functions_todos_updateTodo;
+  "functions/users/getByEmail": typeof functions_users_getByEmail;
 }>;
 
 /**

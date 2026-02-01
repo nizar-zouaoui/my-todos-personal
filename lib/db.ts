@@ -66,6 +66,18 @@ export const consumeAuthCode = (email: string, code: string) => {
   return true;
 };
 
+export const getLatestAuthCodeExpiresAt = (email: string) => {
+  const list = db.authCodes.filter((c) => c.email === email);
+  if (list.length === 0) return null;
+  return list.reduce(
+    (acc, item) => (item.expiresAt > acc ? item.expiresAt : acc),
+    list[0].expiresAt,
+  );
+};
+
+export const getUserByEmail = (email: string) =>
+  db.users.find((x) => x.email === email) || null;
+
 export const findOrCreateUser = (email: string) => {
   let u = db.users.find((x) => x.email === email);
   if (!u) {
