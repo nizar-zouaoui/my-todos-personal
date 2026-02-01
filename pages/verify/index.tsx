@@ -1,19 +1,23 @@
 import type { GetServerSideProps } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Seo from "../../components/Seo";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import MotionFadeIn from "../../components/ui/MotionFadeIn";
 import { verifyToken } from "../../lib/jwt";
+import { getLatestAuthCodeExpiresAt, getUserByEmail } from "../../lib/storage";
 
-export default function Verify() {
+type VerifyProps = {
+  email: string;
+  initialTimeLeft: number;
+};
+
+export default function Verify({ email, initialTimeLeft }: VerifyProps) {
   const router = useRouter();
-  const email = router.query.email as string;
-  if (!email) router.push("/login");
-
   const [code, setCode] = useState("");
+  const [timeLeft, setTimeLeft] = useState(initialTimeLeft);
+  const [isResending, setIsResending] = useState(false);
 
   const inputClass =
     "w-full rounded-md border border-border bg-surface px-3 py-2 text-text-primary placeholder:text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2";
@@ -27,6 +31,32 @@ export default function Verify() {
     const data = await res.json();
     if (data.ok) router.push("/");
     else alert(data.error || "failed");
+  };
+
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+    const timer = window.setInterval(() => {
+      setTimeLeft((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [timeLeft]);
+
+  const handleResend = async () => {
+    if (!email || timeLeft > 0 || isResending) return;
+    setIsResending(true);
+    try {
+      const res = await fetch("/api/auth/send-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error("Failed to resend code");
+      setTimeLeft(60);
+    } catch (error) {
+      console.error((error as Error).message || "Failed to resend code");
+    } finally {
+      setIsResending(false);
+    }
   };
 
   return (
@@ -58,9 +88,18 @@ export default function Verify() {
           </div>
           <div className="mt-6 text-sm text-text-secondary">
             Need a new one?{" "}
-            <Link href="/login" className="text-text-primary">
-              Send again
-            </Link>
+            <button
+              type="button"
+              onClick={handleResend}
+              disabled={timeLeft > 0 || isResending || !email}
+              className={
+                timeLeft > 0 || isResending || !email
+                  ? "text-text-secondary cursor-not-allowed"
+                  : "text-primary cursor-pointer hover:underline"
+              }
+            >
+              {timeLeft > 0 ? `Resend in ${timeLeft}s` : "Send again"}
+            </button>
           </div>
         </Card>
       </MotionFadeIn>
@@ -76,6 +115,32 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       redirect: { destination: "/todos", permanent: false },
     };
   }
+  const email = context.query.email;
+  if (typeof email !== "string" || !email) {
+    return {
+      redirect: { destination: "/login", permanent: false },
+    };
+  }
 
-  return { props: { isAuthenticated: false } };
+  const user = await getUserByEmail(email);
+  const expiresAt = await getLatestAuthCodeExpiresAt(email);
+
+  if (!user && !expiresAt) {
+    return {
+      redirect: { destination: "/login", permanent: false },
+    };
+  }
+
+  const secondsSinceLastSend = expiresAt
+    ? Math.max(0, Math.ceil((expiresAt - Date.now()) / 1000))
+    : 0;
+  const initialTimeLeft = Math.max(0, secondsSinceLastSend);
+
+  return {
+    props: {
+      isAuthenticated: false,
+      email,
+      initialTimeLeft,
+    },
+  };
 };

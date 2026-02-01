@@ -7,7 +7,12 @@ import { v } from "convex/values";
 export default defineSchema({
   users: defineTable({
     email: v.string(),
-  }),
+    firstName: v.optional(v.string()),
+    lastName: v.optional(v.string()),
+    username: v.optional(v.string()),
+    avatarUrl: v.optional(v.string()),
+    birthday: v.optional(v.number()),
+  }).index("by_username", ["username"]),
 
   authCodes: defineTable({
     email: v.string(),

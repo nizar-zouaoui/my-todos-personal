@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Button from "./Button";
 
 type NavbarProps = {
@@ -10,11 +10,46 @@ type NavbarProps = {
 export default function Navbar({ isAuthenticated }: NavbarProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [profile, setProfile] = useState<{
+    firstName?: string;
+    lastName?: string;
+    avatarUrl?: string;
+    email?: string;
+  } | null>(null);
 
   const logout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     router.push("/login");
   };
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const load = async () => {
+      try {
+        const res = await fetch("/api/users/profile");
+        if (!res.ok) return;
+        const data = await res.json();
+        setProfile(data.user || null);
+      } catch {
+        setProfile(null);
+      }
+    };
+    load();
+  }, [isAuthenticated]);
+
+  const displayName = useMemo(() => {
+    if (!profile) return "";
+    const name = `${profile.firstName || ""} ${profile.lastName || ""}`.trim();
+    return name || profile.email || "";
+  }, [profile]);
+
+  const initials = useMemo(() => {
+    if (!profile) return "";
+    const first = profile.firstName?.[0] || "";
+    const last = profile.lastName?.[0] || "";
+    const fallback = profile.email?.[0] || "U";
+    return (first + last || fallback).toUpperCase();
+  }, [profile]);
 
   return (
     <>
@@ -40,6 +75,24 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
             </Button>
             {isAuthenticated ? (
               <>
+                {profile && (
+                  <div className="flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1">
+                    {profile.avatarUrl ? (
+                      <img
+                        src={profile.avatarUrl}
+                        alt="User avatar"
+                        className="h-7 w-7 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-7 w-7 rounded-full bg-surface-muted text-text-primary flex items-center justify-center text-xs font-semibold">
+                        {initials}
+                      </div>
+                    )}
+                    <span className="text-sm text-text-primary">
+                      {displayName}
+                    </span>
+                  </div>
+                )}
                 <Button href="/todos" variant="subtle">
                   My tasks
                 </Button>

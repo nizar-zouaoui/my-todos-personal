@@ -12,6 +12,11 @@ type TodoPatch = Partial<
 export type User = {
   _id: Id<"users">;
   email: string;
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+  avatarUrl?: string;
+  birthday?: number;
 };
 
 export type AuthCode = {
@@ -77,6 +82,35 @@ export const getLatestAuthCodeExpiresAt = (email: string) => {
 
 export const getUserByEmail = (email: string) =>
   db.users.find((x) => x.email === email) || null;
+
+export const getUserById = (id: string) =>
+  db.users.find((x) => x._id === (id as Id<"users">)) || null;
+
+export const updateUserProfile = (
+  userId: string,
+  profile: {
+    firstName?: string;
+    lastName?: string;
+    username?: string;
+    avatarUrl?: string;
+    birthday?: number;
+  },
+) => {
+  const user = db.users.find((u) => u._id === (userId as Id<"users">));
+  if (!user) return null;
+
+  if (profile.username) {
+    const existing = db.users.find(
+      (u) => u.username === profile.username && u._id !== user._id,
+    );
+    if (existing) {
+      throw new Error("Username is already taken.");
+    }
+  }
+
+  Object.assign(user, profile);
+  return user;
+};
 
 export const findOrCreateUser = (email: string) => {
   let u = db.users.find((x) => x.email === email);

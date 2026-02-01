@@ -92,6 +92,43 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
+export const getUserById = async (userId: string) => {
+  if (!useConvex) return local.getUserById(userId);
+  try {
+    return await convexClient.query(api.functions.users.getProfile.getProfile, {
+      userId,
+    });
+  } catch (e) {
+    console.warn("Convex getUserById failed, falling back to local", e);
+    return local.getUserById(userId);
+  }
+};
+
+export const updateUserProfile = async (
+  userId: string,
+  profile: {
+    firstName?: string;
+    lastName?: string;
+    username?: string;
+    avatarUrl?: string;
+    birthday?: number;
+  },
+) => {
+  if (!useConvex) return local.updateUserProfile(userId, profile);
+  try {
+    return await convexClient.mutation(
+      api.functions.users.updateProfile.updateProfile,
+      {
+        userId,
+        ...profile,
+      },
+    );
+  } catch (e) {
+    console.warn("Convex updateUserProfile failed, falling back to local", e);
+    throw e;
+  }
+};
+
 export const findOrCreateUser = async (email: string) => {
   if (!useConvex) return local.findOrCreateUser(email);
   try {

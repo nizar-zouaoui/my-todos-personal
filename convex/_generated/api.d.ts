@@ -32,6 +32,9 @@ import type * as functions_todos_listTodosForUser from "../functions/todos/listT
 import type * as functions_todos_toggleMute from "../functions/todos/toggleMute.js";
 import type * as functions_todos_updateTodo from "../functions/todos/updateTodo.js";
 import type * as functions_users_getByEmail from "../functions/users/getByEmail.js";
+import type * as functions_users_getProfile from "../functions/users/getProfile.js";
+import type * as functions_users_getPublicProfile from "../functions/users/getPublicProfile.js";
+import type * as functions_users_updateProfile from "../functions/users/updateProfile.js";
 
 import type {
   ApiFromModules,
@@ -64,6 +67,9 @@ declare const fullApi: ApiFromModules<{
   "functions/todos/toggleMute": typeof functions_todos_toggleMute;
   "functions/todos/updateTodo": typeof functions_todos_updateTodo;
   "functions/users/getByEmail": typeof functions_users_getByEmail;
+  "functions/users/getProfile": typeof functions_users_getProfile;
+  "functions/users/getPublicProfile": typeof functions_users_getPublicProfile;
+  "functions/users/updateProfile": typeof functions_users_updateProfile;
 }>;
 
 /**
