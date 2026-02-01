@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import type { Id } from "../../../convex/_generated/dataModel";
 import { verifyToken } from "../../../lib/jwt";
 import { createTodo, listTodosForUser } from "../../../lib/storage";
 
@@ -9,7 +10,7 @@ export default async function handler(
   const token = req.cookies.token;
   const payload = token ? verifyToken(token) : null;
   if (!payload) return res.status(401).json({ error: "unauthenticated" });
-  const userId = payload.userId;
+  const userId = payload.userId as Id<"users">;
 
   if (req.method === "GET") {
     const todos = await listTodosForUser(userId);
