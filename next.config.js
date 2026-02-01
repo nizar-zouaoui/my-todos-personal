@@ -3,7 +3,7 @@ const withPWA = require("@ducanh2912/next-pwa").default;
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["framer-motion"],
+  transpilePackages: ["framer-motion", "convex"],
 };
 
 module.exports = withPWA({
