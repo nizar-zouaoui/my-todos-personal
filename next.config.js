@@ -12,7 +12,7 @@ module.exports = withPWA({
   dest: "public",
   disable: false,
   workboxOptions: {
-    importScripts: ["/worker-logic.js"],
+    importScripts: ["/service-worker-logic.js"],
   },
   runtimeCaching: [
     {
