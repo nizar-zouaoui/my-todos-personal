@@ -15,7 +15,6 @@
 # PWA service worker
 /public/sw.js
 /public/workbox-*.js
-/public/worker-*.js
 
 # production
 /build
