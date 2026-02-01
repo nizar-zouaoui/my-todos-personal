@@ -1,17 +1,18 @@
-import { Bell, BellOff } from "lucide-react";
+import { Bell, BellOff, Share2 } from "lucide-react";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Seo from "../../../components/Seo";
+import ShareModal from "../../../components/todos/ShareModal";
 import Button from "../../../components/ui/Button";
 import Card from "../../../components/ui/Card";
 import EmptyState from "../../../components/ui/EmptyState";
 import MotionFadeIn from "../../../components/ui/MotionFadeIn";
 import PageHeader from "../../../components/ui/PageHeader";
 import StatusPill from "../../../components/ui/StatusPill";
-import type { Doc } from "../../../convex/_generated/dataModel";
+import type { Doc, Id } from "../../../convex/_generated/dataModel";
 import { verifyToken } from "../../../lib/jwt";
 import { getTodo } from "../../../lib/storage";
 
@@ -21,12 +22,15 @@ type TaskViewProps = {
   todo: Todo | null;
   isAuthenticated: boolean;
   notFound: boolean;
+  userId: string;
 };
 
-export default function TaskView({ todo, notFound }: TaskViewProps) {
+export default function TaskView({ todo, notFound, userId }: TaskViewProps) {
   const router = useRouter();
   const [currentTodo, setCurrentTodo] = useState(todo);
   const [isToggling, setIsToggling] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  const isOwner = String(currentTodo?.userId) === String(userId);
   if (notFound || !currentTodo) {
     return (
       <div className="min-h-screen bg-background">
@@ -73,6 +77,15 @@ export default function TaskView({ todo, notFound }: TaskViewProps) {
                 >
                   Edit task
                 </Button>
+                {isOwner && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => setShareOpen(true)}
+                  >
+                    <Share2 className="h-4 w-4" />
+                    Share
+                  </Button>
+                )}
               </>
             }
           />
@@ -156,6 +169,14 @@ export default function TaskView({ todo, notFound }: TaskViewProps) {
           </Card>
         </MotionFadeIn>
       </div>
+      {shareOpen && (
+        <ShareModal
+          taskId={currentTodo._id as Id<"todos">}
+          userId={userId as Id<"users">}
+          isOpen={shareOpen}
+          onClose={() => setShareOpen(false)}
+        />
+      )}
     </div>
   );
 }
@@ -174,18 +195,33 @@ export const getServerSideProps: GetServerSideProps<TaskViewProps> = async (
   const id = context.params?.id as string | undefined;
   if (!id) {
     return {
-      props: { todo: null, isAuthenticated: true, notFound: true },
+      props: {
+        todo: null,
+        isAuthenticated: true,
+        notFound: true,
+        userId: payload.userId,
+      },
     };
   }
 
   const todo = await getTodo(id, payload.userId);
   if (!todo) {
     return {
-      props: { todo: null, isAuthenticated: true, notFound: true },
+      props: {
+        todo: null,
+        isAuthenticated: true,
+        notFound: true,
+        userId: payload.userId,
+      },
     };
   }
 
   return {
-    props: { todo, isAuthenticated: true, notFound: false },
+    props: {
+      todo,
+      isAuthenticated: true,
+      notFound: false,
+      userId: payload.userId,
+    },
   };
 };

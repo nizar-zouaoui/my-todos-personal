@@ -1,20 +1,12 @@
 import { v } from "convex/values";
 import { query } from "../../_generated/server";
+import { hasAccess } from "./access";
 
 export const getTask = query({
-  args: { todoId: v.id("todos"), userId: v.string() },
+  args: { todoId: v.id("todos"), userId: v.id("users") },
   handler: async (ctx, args) => {
-    const userId = args.userId;
-    const q = await ctx.db
-      .query("todos")
-      .filter((q) =>
-        q.and(
-          q.eq(q.field("_id"), args.todoId),
-          q.eq(q.field("userId"), userId),
-        ),
-      )
-      .first();
-    if (!q) return null;
-    return q;
+    const allowed = await hasAccess(ctx, args.todoId, args.userId);
+    if (!allowed) return null;
+    return await ctx.db.get(args.todoId);
   },
 });

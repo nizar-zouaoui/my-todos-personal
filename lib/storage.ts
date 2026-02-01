@@ -287,7 +287,7 @@ export const listTodosForUser = async (userId: string) => {
   try {
     const list = await convexClient.query(
       api.functions.todos.listTodosForUser.listTodosForUser,
-      { userId },
+      { userId: userId as Id<"users"> },
     );
     return list as ConvexTodo[];
   } catch (e) {
@@ -301,7 +301,7 @@ export const getTodo = async (id: string, userId: string) => {
   try {
     const doc = await convexClient.query(api.functions.todos.getTodo.getTask, {
       todoId: id as Id<"todos">,
-      userId,
+      userId: userId as Id<"users">,
     });
     return doc as ConvexTodo | null;
   } catch (e) {
@@ -324,7 +324,7 @@ export const updateTodo = async (
       {
         id: id as Id<"todos">,
         patch,
-        userId,
+        userId: userId as Id<"users">,
       },
     );
     return doc as ConvexTodo | null;
@@ -341,7 +341,7 @@ export const toggleMute = async (id: string, userId: string) => {
       api.functions.todos.toggleMute.toggleMute,
       {
         id: id as Id<"todos">,
-        userId,
+        userId: userId as Id<"users">,
       },
     );
   } catch (e) {
@@ -355,7 +355,7 @@ export const deleteTodo = async (id: string, userId: string) => {
   try {
     await convexClient.mutation(api.functions.todos.deleteTodo.deleteTodo, {
       id: id as Id<"todos">,
-      userId,
+      userId: userId as Id<"users">,
     });
     return true;
   } catch (e) {

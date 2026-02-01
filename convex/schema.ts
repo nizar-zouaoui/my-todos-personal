@@ -58,8 +58,17 @@ export default defineSchema({
     createdAt: v.string(),
     expiresAt: v.optional(v.string()),
     completedAt: v.optional(v.string()),
+    completedBy: v.optional(v.id("users")),
     isNotified: v.optional(v.boolean()),
     isMuted: v.optional(v.boolean()),
-    userId: v.string(),
+    userId: v.id("users"),
   }),
+
+  taskCollaborators: defineTable({
+    taskId: v.id("todos"),
+    userId: v.id("users"),
+  })
+    .index("by_user", ["userId"])
+    .index("by_task", ["taskId"])
+    .index("by_pair", ["taskId", "userId"]),
 });

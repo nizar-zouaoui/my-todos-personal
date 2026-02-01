@@ -1,21 +1,17 @@
 import { v } from "convex/values";
 import { mutation } from "../../_generated/server";
+import { hasAccess } from "./access";
 
 export const toggleMute = mutation({
   args: {
     id: v.id("todos"),
-    userId: v.string(),
+    userId: v.id("users"),
   },
   handler: async (ctx, args) => {
-    const todo = await ctx.db
-      .query("todos")
-      .filter((q) =>
-        q.and(
-          q.eq(q.field("_id"), args.id),
-          q.eq(q.field("userId"), args.userId),
-        ),
-      )
-      .first();
+    const allowed = await hasAccess(ctx, args.id, args.userId);
+    if (!allowed) throw new Error("Unauthorized");
+
+    const todo = await ctx.db.get(args.id);
     if (!todo) return null;
 
     const nextMuted = !todo.isMuted;

@@ -1,19 +1,15 @@
-import { formatDistanceToNow } from "date-fns";
-import { Bell, BellOff } from "lucide-react";
 import type { GetServerSideProps } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import Seo from "../../components/Seo";
+import ShareModal from "../../components/todos/ShareModal";
+import TodoCard from "../../components/todos/TodoCard";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import EmptyState from "../../components/ui/EmptyState";
 import MotionFadeIn from "../../components/ui/MotionFadeIn";
 import PageHeader from "../../components/ui/PageHeader";
-import StatusPill from "../../components/ui/StatusPill";
-import type { Doc } from "../../convex/_generated/dataModel";
+import type { Doc, Id } from "../../convex/_generated/dataModel";
 import { verifyToken } from "../../lib/jwt";
 import { listTodosForUser } from "../../lib/storage";
 
@@ -23,11 +19,13 @@ type TodosProps = {
   todos: Todo[];
   notifications: Todo[];
   isAuthenticated: boolean;
+  userId: string;
 };
 
 export default function TodosPage({
   todos: initialTodos,
   notifications: initialNotifications,
+  userId,
 }: TodosProps) {
   const router = useRouter();
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
@@ -36,6 +34,7 @@ export default function TodosPage({
   const [activeTab, setActiveTab] = useState<
     "all" | "pending" | "priority" | "completed"
   >("all");
+  const [shareTaskId, setShareTaskId] = useState<string | null>(null);
 
   const apiFetch = async (input: RequestInfo, init?: RequestInit) => {
     const res = await fetch(input, init);
@@ -139,91 +138,16 @@ export default function TodosPage({
             </div>
             <ul className="space-y-3">
               {filteredTodos.map((t) => (
-                <Card key={String(t._id)} className="p-4">
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3">
-                    <div>
-                      <Link
-                        href={`/todos/task/${String(t._id)}`}
-                        className="font-semibold"
-                      >
-                        {t.title}
-                      </Link>
-                      <div className="text-sm text-text-secondary">
-                        Added {formatDistanceToNow(new Date(t.createdAt))} ago
-                      </div>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {t.completedAt && (
-                          <StatusPill label="Done" variant="success" />
-                        )}
-                        {!t.completedAt && priorityIds.has(String(t._id)) && (
-                          <StatusPill label="Do soon" variant="warning" />
-                        )}
-                      </div>
-                    </div>
-                    <div>
-                      {t.expiresAt && (
-                        <div className="text-sm text-warning">
-                          Do by {formatDistanceToNow(new Date(t.expiresAt))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="mt-3 text-sm text-text-secondary">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      components={{
-                        ul: ({ node, ordered, ...props }) => (
-                          <ul className="list-disc list-inside" {...props} />
-                        ),
-                        ol: ({ node, ordered, ...props }) => (
-                          <ol className="list-decimal list-inside" {...props} />
-                        ),
-                        li: ({ node, ordered, ...props }) => (
-                          <li className="my-1" {...props} />
-                        ),
-                      }}
-                    >
-                      {t.description || ""}
-                    </ReactMarkdown>
-                  </div>
-                  <div className="mt-4 flex items-center justify-end gap-3 text-sm">
-                    {!t.completedAt && t.expiresAt && (
-                      <button
-                        className={`inline-flex items-center justify-center rounded-full border border-border px-3 py-2 text-sm transition-soft ${
-                          t.isMuted
-                            ? "text-text-secondary opacity-60"
-                            : "text-text-primary"
-                        }`}
-                        onClick={() => toggleMute(t)}
-                        aria-label={
-                          t.isMuted ? "Resume reminders" : "Pause reminders"
-                        }
-                        type="button"
-                      >
-                        {t.isMuted ? (
-                          <BellOff className="h-4 w-4" />
-                        ) : (
-                          <Bell className="h-4 w-4" />
-                        )}
-                      </button>
-                    )}
-                    {!t.completedAt && (
-                      <Button
-                        variant="secondary"
-                        onClick={() => toggleComplete(t)}
-                      >
-                        Mark done
-                      </Button>
-                    )}
-                    <Button
-                      variant="secondary"
-                      className="text-warning"
-                      onClick={() => remove(t)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                </Card>
+                <TodoCard
+                  key={String(t._id)}
+                  todo={t}
+                  isOwner={String(t.userId) === String(userId)}
+                  isPriority={priorityIds.has(String(t._id))}
+                  onToggleComplete={() => toggleComplete(t)}
+                  onToggleMute={() => toggleMute(t)}
+                  onRemove={() => remove(t)}
+                  onShare={() => setShareTaskId(String(t._id))}
+                />
               ))}
               {filteredTodos.length === 0 && (
                 <li>
@@ -239,6 +163,14 @@ export default function TodosPage({
           </Card>
         </MotionFadeIn>
       </div>
+      {shareTaskId && (
+        <ShareModal
+          taskId={shareTaskId as Id<"todos">}
+          userId={userId as Id<"users">}
+          isOpen={Boolean(shareTaskId)}
+          onClose={() => setShareTaskId(null)}
+        />
+      )}
     </div>
   );
 }
@@ -269,6 +201,7 @@ export const getServerSideProps: GetServerSideProps<TodosProps> = async (
       todos,
       notifications,
       isAuthenticated: true,
+      userId,
     },
   };
 };

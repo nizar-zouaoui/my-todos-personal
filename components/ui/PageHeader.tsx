@@ -19,7 +19,11 @@ export default function PageHeader({
         )}
         <h1 className="text-h1 text-text-primary">{title}</h1>
       </div>
-      {actions && <div className="flex items-center gap-3">{actions}</div>}
+      {actions && (
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:justify-end sm:gap-3">
+          {actions}
+        </div>
+      )}
     </header>
   );
 }

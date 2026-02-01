@@ -2,16 +2,32 @@ import { v } from "convex/values";
 import { mutation } from "../../_generated/server";
 
 export const deleteTodo = mutation({
-  args: { id: v.id("todos"), userId: v.string() },
+  args: { id: v.id("todos"), userId: v.id("users") },
   handler: async (ctx, args) => {
-    const userId = args.userId;
-    const q = await ctx.db
-      .query("todos")
-      .filter((q) =>
-        q.and(q.eq(q.field("_id"), args.id), q.eq(q.field("userId"), userId)),
+    const todo = await ctx.db.get(args.id);
+    if (!todo) return null;
+
+    if (todo.userId === args.userId) {
+      const collaborators = await ctx.db
+        .query("taskCollaborators")
+        .withIndex("by_task", (q) => q.eq("taskId", args.id))
+        .collect();
+      await Promise.all(collaborators.map((row) => ctx.db.delete(row._id)));
+      return await ctx.db.delete(args.id);
+    }
+
+    const row = await ctx.db
+      .query("taskCollaborators")
+      .withIndex("by_pair", (q) =>
+        q.eq("taskId", args.id).eq("userId", args.userId),
       )
       .first();
-    if (!q) return null;
-    return await ctx.db.delete("todos", args.id);
+
+    if (row) {
+      await ctx.db.delete(row._id);
+      return { left: true };
+    }
+
+    throw new Error("Unauthorized");
   },
 });
