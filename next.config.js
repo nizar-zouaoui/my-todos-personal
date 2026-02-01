@@ -11,6 +11,9 @@ module.exports = withPWA({
   customWorkerDir: "public",
   dest: "public",
   disable: false,
+  workboxOptions: {
+    importScripts: ["/worker-logic.js"],
+  },
   runtimeCaching: [
     {
       urlPattern: /^https?.*\/api\/.*$/,
