@@ -96,6 +96,9 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
                 <Button href="/todos" variant="subtle">
                   My tasks
                 </Button>
+                <Button href="/friends" variant="subtle">
+                  Friends
+                </Button>
                 <Button href="/settings" variant="subtle">
                   Settings
                 </Button>
@@ -144,6 +147,13 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
                     onClick={() => setOpen(false)}
                   >
                     My tasks
+                  </Link>
+                  <Link
+                    href="/friends"
+                    className="text-text-primary"
+                    onClick={() => setOpen(false)}
+                  >
+                    Friends
                   </Link>
                   <Link
                     href="/settings"

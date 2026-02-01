@@ -9,6 +9,7 @@
  */
 
 import type * as crons from "../crons.js";
+import type * as friends from "../friends.js";
 import type * as functions_auth_consumeAuthCode from "../functions/auth/consumeAuthCode.js";
 import type * as functions_auth_createAuthCode from "../functions/auth/createAuthCode.js";
 import type * as functions_auth_deleteExpiredCodes from "../functions/auth/deleteExpiredCodes.js";
@@ -25,6 +26,7 @@ import type * as functions_push_processDue from "../functions/push/processDue.js
 import type * as functions_push_send from "../functions/push/send.js";
 import type * as functions_push_subscribe from "../functions/push/subscribe.js";
 import type * as functions_push_unsubscribe from "../functions/push/unsubscribe.js";
+import type * as functions_todos_access from "../functions/todos/access.js";
 import type * as functions_todos_createTodo from "../functions/todos/createTodo.js";
 import type * as functions_todos_deleteTodo from "../functions/todos/deleteTodo.js";
 import type * as functions_todos_getTodo from "../functions/todos/getTodo.js";
@@ -44,6 +46,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   crons: typeof crons;
+  friends: typeof friends;
   "functions/auth/consumeAuthCode": typeof functions_auth_consumeAuthCode;
   "functions/auth/createAuthCode": typeof functions_auth_createAuthCode;
   "functions/auth/deleteExpiredCodes": typeof functions_auth_deleteExpiredCodes;
@@ -60,6 +63,7 @@ declare const fullApi: ApiFromModules<{
   "functions/push/send": typeof functions_push_send;
   "functions/push/subscribe": typeof functions_push_subscribe;
   "functions/push/unsubscribe": typeof functions_push_unsubscribe;
+  "functions/todos/access": typeof functions_todos_access;
   "functions/todos/createTodo": typeof functions_todos_createTodo;
   "functions/todos/deleteTodo": typeof functions_todos_deleteTodo;
   "functions/todos/getTodo": typeof functions_todos_getTodo;

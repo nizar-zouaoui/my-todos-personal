@@ -14,6 +14,23 @@ export default defineSchema({
     birthday: v.optional(v.number()),
   }).index("by_username", ["username"]),
 
+  friendRequests: defineTable({
+    senderId: v.id("users"),
+    receiverId: v.id("users"),
+    status: v.string(),
+  })
+    .index("by_receiver", ["receiverId"])
+    .index("by_sender", ["senderId"])
+    .index("by_pair", ["senderId", "receiverId"]),
+
+  friendships: defineTable({
+    user1: v.id("users"),
+    user2: v.id("users"),
+  })
+    .index("by_user1", ["user1"])
+    .index("by_user2", ["user2"])
+    .index("by_pair", ["user1", "user2"]),
+
   authCodes: defineTable({
     email: v.string(),
     code: v.string(),
