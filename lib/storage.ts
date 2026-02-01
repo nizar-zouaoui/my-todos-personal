@@ -100,6 +100,63 @@ export const storeRefreshToken = async (
   }
 };
 
+type PushKeys = { p256dh: string; auth: string };
+type PushSubscriptionRecord = {
+  userId: string;
+  endpoint: string;
+  keys: PushKeys;
+};
+
+export const upsertPushSubscription = async (
+  subscription: PushSubscriptionRecord,
+) => {
+  if (!useConvex) return local.upsertPushSubscription(subscription);
+  try {
+    return await convexClient.mutation(api.functions.push.subscribe.subscribe, {
+      userId: subscription.userId,
+      endpoint: subscription.endpoint,
+      keys: subscription.keys,
+    });
+  } catch (e) {
+    console.warn("Convex subscribe failed, falling back to local", e);
+    return local.upsertPushSubscription(subscription);
+  }
+};
+
+export const listPushSubscriptions = async (userId: string) => {
+  if (!useConvex) return local.listPushSubscriptions(userId);
+  try {
+    return await convexClient.query(api.functions.push.listByUser.listByUser, {
+      userId,
+    });
+  } catch (e) {
+    console.warn(
+      "Convex listPushSubscriptions failed, falling back to local",
+      e,
+    );
+    return local.listPushSubscriptions(userId);
+  }
+};
+
+export const deletePushSubscription = async (id: string) => {
+  if (!useConvex) return local.deletePushSubscription(id);
+  try {
+    await convexClient.mutation(
+      api.functions.push.deleteSubscription.deleteSubscription,
+      {
+        id: id as Id<"pushSubscriptions">,
+      },
+    );
+    return true;
+  } catch (e) {
+    console.warn(
+      "Convex deletePushSubscription failed, falling back to local",
+      e,
+    );
+    return local.deletePushSubscription(id);
+  }
+};
+
 export const verifyRefreshTokenStored = async (token: string) => {
   if (!useConvex) return local.verifyRefreshTokenStored(token);
   try {

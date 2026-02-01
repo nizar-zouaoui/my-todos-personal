@@ -20,22 +20,33 @@ export type AuthCode = {
   expiresAt: number;
 };
 
+export type PushSubscriptionRecord = {
+  _id: Id<"pushSubscriptions">;
+  userId: string;
+  endpoint: string;
+  keys: { p256dh: string; auth: string };
+};
+
 const db: {
   todos: Todo[];
   users: User[];
   authCodes: AuthCode[];
   refreshTokens: { token: string; userId: string; expiresAt: number }[];
+  pushSubscriptions: PushSubscriptionRecord[];
 } = {
   todos: [],
   users: [],
   authCodes: [],
   refreshTokens: [],
+  pushSubscriptions: [],
 };
 
 const makeTodoId = (): Id<"todos"> =>
   Math.random().toString(36).slice(2) as Id<"todos">;
 const makeUserId = (): Id<"users"> =>
   Math.random().toString(36).slice(2) as Id<"users">;
+const makePushId = (): Id<"pushSubscriptions"> =>
+  Math.random().toString(36).slice(2) as Id<"pushSubscriptions">;
 
 export const createAuthCode = (email: string, code: string, ttlMs = 60_000) => {
   const expiresAt = Date.now() + ttlMs;
@@ -77,6 +88,39 @@ export const verifyRefreshTokenStored = (token: string) => {
   if (!rec) return null;
   if (Date.now() > rec.expiresAt) return null;
   return rec.userId;
+};
+
+export const upsertPushSubscription = (subscription: {
+  userId: string;
+  endpoint: string;
+  keys: { p256dh: string; auth: string };
+}) => {
+  const existing = db.pushSubscriptions.find(
+    (s) =>
+      s.userId === subscription.userId && s.endpoint === subscription.endpoint,
+  );
+  if (existing) {
+    existing.keys = subscription.keys;
+    return existing._id;
+  }
+  const rec: PushSubscriptionRecord = {
+    _id: makePushId(),
+    userId: subscription.userId,
+    endpoint: subscription.endpoint,
+    keys: subscription.keys,
+  };
+  db.pushSubscriptions.push(rec);
+  return rec._id;
+};
+
+export const listPushSubscriptions = (userId: string) =>
+  db.pushSubscriptions.filter((s) => s.userId === userId);
+
+export const deletePushSubscription = (id: string) => {
+  const idx = db.pushSubscriptions.findIndex((s) => s._id === id);
+  if (idx === -1) return false;
+  db.pushSubscriptions.splice(idx, 1);
+  return true;
 };
 
 export const createTodo = (

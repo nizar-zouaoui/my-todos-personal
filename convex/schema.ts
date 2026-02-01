@@ -21,12 +21,22 @@ export default defineSchema({
     expiresAt: v.number(),
   }),
 
+  pushSubscriptions: defineTable({
+    userId: v.string(),
+    endpoint: v.string(),
+    keys: v.object({
+      p256dh: v.string(),
+      auth: v.string(),
+    }),
+  }),
+
   todos: defineTable({
     title: v.string(),
     description: v.optional(v.string()),
     createdAt: v.string(),
     expiresAt: v.optional(v.string()),
     completedAt: v.optional(v.string()),
+    isNotified: v.optional(v.boolean()),
     userId: v.string(),
   }),
 });

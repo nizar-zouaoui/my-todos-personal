@@ -7,8 +7,10 @@ const nextConfig = {
 };
 
 module.exports = withPWA({
+  sw: "custom-sw.js",
+  customWorkerDir: "public",
   dest: "public",
-  disable: process.env.NODE_ENV === "development",
+  disable: false,
   runtimeCaching: [
     {
       urlPattern: /^https?.*\/api\/.*$/,

@@ -8,11 +8,19 @@
  * @module
  */
 
+import type * as crons from "../crons.js";
 import type * as functions_auth_consumeAuthCode from "../functions/auth/consumeAuthCode.js";
 import type * as functions_auth_createAuthCode from "../functions/auth/createAuthCode.js";
 import type * as functions_auth_findOrCreateUser from "../functions/auth/findOrCreateUser.js";
 import type * as functions_auth_storeRefreshToken from "../functions/auth/storeRefreshToken.js";
 import type * as functions_auth_verifyRefreshToken from "../functions/auth/verifyRefreshToken.js";
+import type * as functions_push_deleteSubscription from "../functions/push/deleteSubscription.js";
+import type * as functions_push_listByUser from "../functions/push/listByUser.js";
+import type * as functions_push_listDueTodos from "../functions/push/listDueTodos.js";
+import type * as functions_push_markNotified from "../functions/push/markNotified.js";
+import type * as functions_push_processDue from "../functions/push/processDue.js";
+import type * as functions_push_send from "../functions/push/send.js";
+import type * as functions_push_subscribe from "../functions/push/subscribe.js";
 import type * as functions_todos_createTodo from "../functions/todos/createTodo.js";
 import type * as functions_todos_deleteTodo from "../functions/todos/deleteTodo.js";
 import type * as functions_todos_getTodo from "../functions/todos/getTodo.js";
@@ -26,11 +34,19 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  crons: typeof crons;
   "functions/auth/consumeAuthCode": typeof functions_auth_consumeAuthCode;
   "functions/auth/createAuthCode": typeof functions_auth_createAuthCode;
   "functions/auth/findOrCreateUser": typeof functions_auth_findOrCreateUser;
   "functions/auth/storeRefreshToken": typeof functions_auth_storeRefreshToken;
   "functions/auth/verifyRefreshToken": typeof functions_auth_verifyRefreshToken;
+  "functions/push/deleteSubscription": typeof functions_push_deleteSubscription;
+  "functions/push/listByUser": typeof functions_push_listByUser;
+  "functions/push/listDueTodos": typeof functions_push_listDueTodos;
+  "functions/push/markNotified": typeof functions_push_markNotified;
+  "functions/push/processDue": typeof functions_push_processDue;
+  "functions/push/send": typeof functions_push_send;
+  "functions/push/subscribe": typeof functions_push_subscribe;
   "functions/todos/createTodo": typeof functions_todos_createTodo;
   "functions/todos/deleteTodo": typeof functions_todos_deleteTodo;
   "functions/todos/getTodo": typeof functions_todos_getTodo;

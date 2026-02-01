@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import NotificationManager from "../../components/push/NotificationManager";
 import Seo from "../../components/Seo";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
@@ -100,6 +101,9 @@ export default function TodosPage({
       />
       <div className="max-w-5xl mx-auto px-6 py-10">
         <PageHeader title="My day" subtitle="Daily planner" />
+        <div className="my-4">
+          <NotificationManager />
+        </div>
         <div className="flex items-center justify-end pb-6">
           <Button href="/todos/create" variant="primary">
             Add task
