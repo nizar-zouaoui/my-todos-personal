@@ -116,11 +116,40 @@ export const upsertPushSubscription = (subscription: {
 export const listPushSubscriptions = (userId: string) =>
   db.pushSubscriptions.filter((s) => s.userId === userId);
 
+export const isPushSubscribed = (userId: string, endpoint?: string) => {
+  if (endpoint) {
+    return db.pushSubscriptions.some(
+      (s) => s.userId === userId && s.endpoint === endpoint,
+    );
+  }
+  return db.pushSubscriptions.some((s) => s.userId === userId);
+};
+
+export const deletePushSubscriptionByEndpoint = (
+  userId: string,
+  endpoint: string,
+) => {
+  const before = db.pushSubscriptions.length;
+  db.pushSubscriptions = db.pushSubscriptions.filter(
+    (s) => !(s.userId === userId && s.endpoint === endpoint),
+  );
+  return before - db.pushSubscriptions.length;
+};
+
 export const deletePushSubscription = (id: string) => {
   const idx = db.pushSubscriptions.findIndex((s) => s._id === id);
   if (idx === -1) return false;
   db.pushSubscriptions.splice(idx, 1);
   return true;
+};
+
+export const toggleMute = (id: string, userId: string) => {
+  const t = db.todos.find(
+    (x) => x._id === (id as Id<"todos">) && x.userId === userId,
+  );
+  if (!t) return null;
+  t.isMuted = !t.isMuted;
+  return t;
 };
 
 export const createTodo = (

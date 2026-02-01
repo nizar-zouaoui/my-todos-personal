@@ -1,11 +1,11 @@
 import { formatDistanceToNow } from "date-fns";
+import { Bell, BellOff } from "lucide-react";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import NotificationManager from "../../components/push/NotificationManager";
 import Seo from "../../components/Seo";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
@@ -79,9 +79,11 @@ export default function TodosPage({
     load();
   };
 
-  const logout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/login");
+  const toggleMute = async (todo: Todo) => {
+    await apiFetch(`/api/todos/${String(todo._id)}/mute`, {
+      method: "POST",
+    });
+    load();
   };
 
   const priorityIds = new Set(notifications.map((n) => String(n._id)));
@@ -101,9 +103,6 @@ export default function TodosPage({
       />
       <div className="max-w-5xl mx-auto px-6 py-10">
         <PageHeader title="My day" subtitle="Daily planner" />
-        <div className="my-4">
-          <NotificationManager />
-        </div>
         <div className="flex items-center justify-end pb-6">
           <Button href="/todos/create" variant="primary">
             Add task
@@ -188,6 +187,26 @@ export default function TodosPage({
                     </ReactMarkdown>
                   </div>
                   <div className="mt-4 flex items-center justify-end gap-3 text-sm">
+                    {!t.completedAt && t.expiresAt && (
+                      <button
+                        className={`inline-flex items-center justify-center rounded-full border border-border px-3 py-2 text-sm transition-soft ${
+                          t.isMuted
+                            ? "text-text-secondary opacity-60"
+                            : "text-text-primary"
+                        }`}
+                        onClick={() => toggleMute(t)}
+                        aria-label={
+                          t.isMuted ? "Resume reminders" : "Pause reminders"
+                        }
+                        type="button"
+                      >
+                        {t.isMuted ? (
+                          <BellOff className="h-4 w-4" />
+                        ) : (
+                          <Bell className="h-4 w-4" />
+                        )}
+                      </button>
+                    )}
                     {!t.completedAt && (
                       <Button
                         variant="secondary"

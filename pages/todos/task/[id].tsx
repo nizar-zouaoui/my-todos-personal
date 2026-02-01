@@ -1,4 +1,7 @@
+import { Bell, BellOff } from "lucide-react";
 import type { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Seo from "../../../components/Seo";
@@ -21,7 +24,10 @@ type TaskViewProps = {
 };
 
 export default function TaskView({ todo, notFound }: TaskViewProps) {
-  if (notFound || !todo) {
+  const router = useRouter();
+  const [currentTodo, setCurrentTodo] = useState(todo);
+  const [isToggling, setIsToggling] = useState(false);
+  if (notFound || !currentTodo) {
     return (
       <div className="min-h-screen bg-background">
         <Seo
@@ -44,14 +50,14 @@ export default function TaskView({ todo, notFound }: TaskViewProps) {
   return (
     <div className="min-h-screen bg-background">
       <Seo
-        title={todo.title}
-        description={todo.description || "A task in your daily planner."}
+        title={currentTodo.title}
+        description={currentTodo.description || "A task in your daily planner."}
         noIndex
       />
       <div className="max-w-3xl mx-auto px-6 py-10">
         <MotionFadeIn className="space-y-6">
           <PageHeader
-            title={todo.title}
+            title={currentTodo.title}
             subtitle="My tasks"
             actions={
               <>
@@ -62,7 +68,7 @@ export default function TaskView({ todo, notFound }: TaskViewProps) {
                   Add task
                 </Button>
                 <Button
-                  href={`/todos/edit/${String(todo._id)}`}
+                  href={`/todos/edit/${String(currentTodo._id)}`}
                   variant="primary"
                 >
                   Edit task
@@ -73,17 +79,56 @@ export default function TaskView({ todo, notFound }: TaskViewProps) {
 
           <Card className="p-5">
             <div className="flex flex-wrap items-center gap-3 text-sm text-text-secondary">
-              <span>Added {new Date(todo.createdAt).toLocaleString()}</span>
-              {todo.expiresAt && (
+              <span>
+                Added {new Date(currentTodo.createdAt).toLocaleString()}
+              </span>
+              {currentTodo.expiresAt && (
                 <span className="text-warning">
-                  Do by {new Date(todo.expiresAt).toLocaleString()}
+                  Do by {new Date(currentTodo.expiresAt).toLocaleString()}
                 </span>
               )}
-              {todo.completedAt && (
+              {currentTodo.completedAt && (
                 <StatusPill label="Done" variant="success" />
               )}
-              {!todo.completedAt && todo.expiresAt && (
+              {!currentTodo.completedAt && currentTodo.expiresAt && (
                 <StatusPill label="In progress" variant="warning" />
+              )}
+              {!currentTodo.completedAt && currentTodo.expiresAt && (
+                <button
+                  className={`inline-flex items-center justify-center rounded-full border border-border px-3 py-2 text-sm transition-soft ${
+                    currentTodo.isMuted
+                      ? "text-text-secondary opacity-60"
+                      : "text-text-primary"
+                  }`}
+                  type="button"
+                  disabled={isToggling}
+                  onClick={async () => {
+                    setIsToggling(true);
+                    try {
+                      const res = await fetch(
+                        `/api/todos/${String(currentTodo._id)}/mute`,
+                        { method: "POST" },
+                      );
+                      if (res.ok) {
+                        const data = await res.json();
+                        setCurrentTodo(data.todo);
+                      } else if (res.status === 401) {
+                        router.push("/login");
+                      }
+                    } finally {
+                      setIsToggling(false);
+                    }
+                  }}
+                  aria-label={
+                    currentTodo.isMuted ? "Resume reminders" : "Pause reminders"
+                  }
+                >
+                  {currentTodo.isMuted ? (
+                    <BellOff className="h-4 w-4" />
+                  ) : (
+                    <Bell className="h-4 w-4" />
+                  )}
+                </button>
               )}
             </div>
           </Card>
@@ -105,7 +150,7 @@ export default function TaskView({ todo, notFound }: TaskViewProps) {
                   ),
                 }}
               >
-                {todo.description || "No notes yet."}
+                {currentTodo.description || "No notes yet."}
               </ReactMarkdown>
             </div>
           </Card>

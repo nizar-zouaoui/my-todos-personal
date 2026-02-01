@@ -15,16 +15,19 @@ import type * as functions_auth_findOrCreateUser from "../functions/auth/findOrC
 import type * as functions_auth_storeRefreshToken from "../functions/auth/storeRefreshToken.js";
 import type * as functions_auth_verifyRefreshToken from "../functions/auth/verifyRefreshToken.js";
 import type * as functions_push_deleteSubscription from "../functions/push/deleteSubscription.js";
+import type * as functions_push_isSubscribed from "../functions/push/isSubscribed.js";
 import type * as functions_push_listByUser from "../functions/push/listByUser.js";
 import type * as functions_push_listDueTodos from "../functions/push/listDueTodos.js";
 import type * as functions_push_markNotified from "../functions/push/markNotified.js";
 import type * as functions_push_processDue from "../functions/push/processDue.js";
 import type * as functions_push_send from "../functions/push/send.js";
 import type * as functions_push_subscribe from "../functions/push/subscribe.js";
+import type * as functions_push_unsubscribe from "../functions/push/unsubscribe.js";
 import type * as functions_todos_createTodo from "../functions/todos/createTodo.js";
 import type * as functions_todos_deleteTodo from "../functions/todos/deleteTodo.js";
 import type * as functions_todos_getTodo from "../functions/todos/getTodo.js";
 import type * as functions_todos_listTodosForUser from "../functions/todos/listTodosForUser.js";
+import type * as functions_todos_toggleMute from "../functions/todos/toggleMute.js";
 import type * as functions_todos_updateTodo from "../functions/todos/updateTodo.js";
 
 import type {
@@ -41,16 +44,19 @@ declare const fullApi: ApiFromModules<{
   "functions/auth/storeRefreshToken": typeof functions_auth_storeRefreshToken;
   "functions/auth/verifyRefreshToken": typeof functions_auth_verifyRefreshToken;
   "functions/push/deleteSubscription": typeof functions_push_deleteSubscription;
+  "functions/push/isSubscribed": typeof functions_push_isSubscribed;
   "functions/push/listByUser": typeof functions_push_listByUser;
   "functions/push/listDueTodos": typeof functions_push_listDueTodos;
   "functions/push/markNotified": typeof functions_push_markNotified;
   "functions/push/processDue": typeof functions_push_processDue;
   "functions/push/send": typeof functions_push_send;
   "functions/push/subscribe": typeof functions_push_subscribe;
+  "functions/push/unsubscribe": typeof functions_push_unsubscribe;
   "functions/todos/createTodo": typeof functions_todos_createTodo;
   "functions/todos/deleteTodo": typeof functions_todos_deleteTodo;
   "functions/todos/getTodo": typeof functions_todos_getTodo;
   "functions/todos/listTodosForUser": typeof functions_todos_listTodosForUser;
+  "functions/todos/toggleMute": typeof functions_todos_toggleMute;
   "functions/todos/updateTodo": typeof functions_todos_updateTodo;
 }>;
 

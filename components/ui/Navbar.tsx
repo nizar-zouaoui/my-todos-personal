@@ -43,6 +43,9 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
                 <Button href="/todos" variant="subtle">
                   My tasks
                 </Button>
+                <Button href="/settings" variant="subtle">
+                  Settings
+                </Button>
                 <Button variant="subtle" onClick={logout}>
                   Sign out
                 </Button>
@@ -88,6 +91,13 @@ export default function Navbar({ isAuthenticated }: NavbarProps) {
                     onClick={() => setOpen(false)}
                   >
                     My tasks
+                  </Link>
+                  <Link
+                    href="/settings"
+                    className="text-text-primary"
+                    onClick={() => setOpen(false)}
+                  >
+                    Settings
                   </Link>
                   <button
                     className="text-text-secondary text-left"

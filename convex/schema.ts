@@ -37,6 +37,7 @@ export default defineSchema({
     expiresAt: v.optional(v.string()),
     completedAt: v.optional(v.string()),
     isNotified: v.optional(v.boolean()),
+    isMuted: v.optional(v.boolean()),
     userId: v.string(),
   }),
 });

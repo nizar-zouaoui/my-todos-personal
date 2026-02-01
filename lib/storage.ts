@@ -157,6 +157,39 @@ export const deletePushSubscription = async (id: string) => {
   }
 };
 
+export const isPushSubscribed = async (userId: string, endpoint?: string) => {
+  if (!useConvex) return local.isPushSubscribed(userId, endpoint);
+  try {
+    return await convexClient.query(
+      api.functions.push.isSubscribed.isSubscribed,
+      {
+        userId,
+        endpoint,
+      },
+    );
+  } catch (e) {
+    console.warn("Convex isSubscribed failed, falling back to local", e);
+    return local.isPushSubscribed(userId, endpoint);
+  }
+};
+
+export const unsubscribePush = async (userId: string, endpoint: string) => {
+  if (!useConvex)
+    return local.deletePushSubscriptionByEndpoint(userId, endpoint);
+  try {
+    return await convexClient.mutation(
+      api.functions.push.unsubscribe.unsubscribe,
+      {
+        userId,
+        endpoint,
+      },
+    );
+  } catch (e) {
+    console.warn("Convex unsubscribe failed, falling back to local", e);
+    return local.deletePushSubscriptionByEndpoint(userId, endpoint);
+  }
+};
+
 export const verifyRefreshTokenStored = async (token: string) => {
   if (!useConvex) return local.verifyRefreshTokenStored(token);
   try {
@@ -235,6 +268,22 @@ export const updateTodo = async (
   } catch (e) {
     console.warn("Convex updateTodo failed, falling back to local", e);
     return local.updateTodo(id, patch, userId);
+  }
+};
+
+export const toggleMute = async (id: string, userId: string) => {
+  if (!useConvex) return local.toggleMute(id, userId);
+  try {
+    return await convexClient.mutation(
+      api.functions.todos.toggleMute.toggleMute,
+      {
+        id: id as Id<"todos">,
+        userId,
+      },
+    );
+  } catch (e) {
+    console.warn("Convex toggleMute failed, falling back to local", e);
+    return local.toggleMute(id, userId);
   }
 };
 

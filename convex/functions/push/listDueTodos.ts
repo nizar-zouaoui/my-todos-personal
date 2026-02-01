@@ -14,6 +14,7 @@ export const listDueTodos = query({
           q.neq(q.field("expiresAt"), undefined),
           q.eq(q.field("completedAt"), undefined),
           q.neq(q.field("isNotified"), true),
+          q.neq(q.field("isMuted"), true),
           q.gte(q.field("expiresAt"), args.nowIso),
           q.lte(q.field("expiresAt"), args.windowIso),
         ),
