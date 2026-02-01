@@ -48,10 +48,11 @@ export const processDue = action({
       await Promise.all(
         subs.map(async (sub) => {
           try {
-            await webpush.sendNotification(
+            const sendNotification = await webpush.sendNotification(
               { endpoint: sub.endpoint, keys: sub.keys },
               payload,
             );
+            console.log(sendNotification);
           } catch (err: unknown) {
             const statusCode = (err as { statusCode?: number })?.statusCode;
             if (statusCode === 410) {
@@ -68,10 +69,10 @@ export const processDue = action({
         }),
       );
 
-      await ctx.runMutation(api.functions.push.markNotified.markNotified, {
-        id: todo._id,
-        userId: todo.userId,
-      });
+      //   await ctx.runMutation(api.functions.push.markNotified.markNotified, {
+      //     id: todo._id,
+      //     userId: todo.userId,
+      //   });
     }
 
     return { checked: dueTodos.length };

@@ -32,19 +32,34 @@ export const send = action({
       body: args.body,
       url: args.url || "/todos",
     });
+    console.log("[push.send] payload:", payload);
 
     await Promise.all(
       subs.map(async (sub) => {
+        console.log("[push.send] sending to:", sub.endpoint);
         try {
-          await webpush.sendNotification(
+          const result = await webpush.sendNotification(
             {
               endpoint: sub.endpoint,
               keys: sub.keys,
             },
             payload,
           );
+          console.log("[push.send] response:", {
+            statusCode: result?.statusCode,
+            headers: result?.headers,
+            body: result?.body,
+          });
         } catch (err: unknown) {
+          console.error("[push.send] error:", err);
           const statusCode = (err as { statusCode?: number })?.statusCode;
+          const headers = (err as { headers?: unknown })?.headers;
+          const body = (err as { body?: unknown })?.body;
+          console.error("[push.send] error details:", {
+            statusCode,
+            headers,
+            body,
+          });
           if (statusCode === 410) {
             await ctx.runMutation(
               api.functions.push.deleteSubscription.deleteSubscription,
